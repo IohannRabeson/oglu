@@ -1,6 +1,6 @@
-project(simple_triangle)
+project(camera)
 
-set(APPLICATION_NAME simple_triangle.app)
+set(APPLICATION_NAME camera.app)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(SHD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
@@ -10,8 +10,8 @@ set(SRC
 )
 
 set(SHADER_SRC
-	${SHD_DIR}/simple_triangle.frag
-	${SHD_DIR}/simple_triangle.vert
+	${SHD_DIR}/camera.frag
+	${SHD_DIR}/camera.vert
 )
 
 include_directories(${INC_DIR})

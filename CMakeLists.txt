@@ -51,12 +51,14 @@ set(SRC
 	${INC_DIR}/Window.hpp
 	${INC_DIR}/IKeyboardListener.hpp
 	${INC_DIR}/IWindowListener.hpp
+	${INC_DIR}/Camera.hpp
 
 	${SRC_DIR}/Program.cpp
 	${SRC_DIR}/Window.cpp
 	${SRC_DIR}/ContextSettings.cpp
 	${SRC_DIR}/ShaderCompilationException.cpp
 	${SRC_DIR}/ProgramLinkException.cpp
+	${SRC_DIR}/Camera.cpp
 )
 
 # Includes

@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:41:20 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 21:59:23 by irabeson         ###   ########.fr       */
+/*   Updated: 2015/09/13 21:58:47 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "Oglu/ContextSettings.hpp"
 # include "Oglu/KeyModifier.hpp"
 # include "Oglu/MouseButton.hpp"
+
+# include <glm/glm.hpp>
 
 # include <string>
 # include <vector>
@@ -29,6 +31,13 @@ namespace oglu
 	class Window
 	{
 	public:
+		enum class CursorMode : int
+		{
+			Enabled = GLFW_CURSOR_NORMAL,
+			Hidden = GLFW_CURSOR_HIDDEN,
+			Disabled = GLFW_CURSOR_DISABLED
+		};
+
 		Window();
 		~Window();
 
@@ -43,6 +52,13 @@ namespace oglu
 		void		display();
 		void		pollEvents();
 
+		void		setCursorMode(CursorMode mode);
+		
+		void		setCursorPosition(glm::dvec2 const& pos);
+		glm::dvec2	getCursorPosition()const;
+
+		bool		isKeyPressed(int key)const;
+
 		void		registerWindowListener(IWindowListener* listener);
 		void		unregisterWindowListener(IWindowListener* listener);
 		void		registerKeyboardListener(IKeyboardListener* listener);
@@ -50,6 +66,7 @@ namespace oglu
 		void		registerMouseListener(IMouseListener* listener);
 		void		unregisterMouseListener(IMouseListener* listener);
 	private:
+		// TODO: use glm vec when it is possible
 		void		notifyWindowClosed();
 		void		notifyWindowMoved(int x, int y);
 		void		notifyWindowResized(int width, int height);

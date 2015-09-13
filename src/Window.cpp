@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:59:10 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 22:00:38 by irabeson         ###   ########.fr       */
+/*   Updated: 2015/09/13 21:59:13 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,31 @@ namespace oglu
 		glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
 		glClear(m_clearMode);
 	}
+
+
+	void	Window::setCursorMode(CursorMode mode)
+	{
+		glfwSetInputMode(m_window, GLFW_CURSOR, static_cast<int>(mode));
+	}
+
+	glm::dvec2	Window::getCursorPosition()const
+	{
+		glm::dvec2	pos;
+
+		glfwGetCursorPos(m_window, &pos.x, &pos.y);
+		return (pos);
+	}
+
+	bool	Window::isKeyPressed(int key)const
+	{
+		return (glfwGetKey(m_window, key));
+	}
+
+	void	Window::setCursorPosition(glm::dvec2 const& pos)
+	{
+		glfwSetCursorPos(m_window, pos.x, pos.y);
+	}
+
 
 	void	Window::display()
 	{
