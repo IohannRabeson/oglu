@@ -15,6 +15,12 @@ finds automaticly their locations.
 
 Oglu example require OpenGL 4.1.  
 
+# Submodules
+Oglu use git submodule for somes of their dependencies.  
+Don't forget to update these submodule by typing:
+
+    git submodule update
+
 # Building the project and compiling
 
     cd <where you want to build this project>
