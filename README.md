@@ -7,9 +7,13 @@
  - [Boost](http://www.boost.org/) test framework (optional)
 Notes only boost_test_unit_framework and boost_system are needed.
  - [Doxygen](http://www.stack.nl/~dimitri/doxygen/) (optional)
+ - [OpenGL](https://www.opengl.org/)
+ - [Glew](http://glew.sourceforge.net/)
 
 Just install each programs/libraries required and cmake will
 finds automaticly their locations.
+
+Oglu example require OpenGL 4.1.  
 
 # Building the project and compiling
 
