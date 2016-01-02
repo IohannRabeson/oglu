@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:59:10 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/13 21:59:13 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/01/02 18:35:42 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,14 +367,14 @@ namespace oglu
 	void	Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
-		
+
 		render->notifyMouseMoved(x, y);
 	}
 
 	void	Window::mouseFocusCallback(GLFWwindow* window, int entered)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
-		
+
 		if (entered)
 		{
 			render->notifyMouseEntered();

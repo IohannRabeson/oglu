@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:41:20 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/13 21:58:47 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/01/02 18:36:15 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ namespace oglu
 		void		pollEvents();
 
 		void		setCursorMode(CursorMode mode);
-		
+
 		void		setCursorPosition(glm::dvec2 const& pos);
 		glm::dvec2	getCursorPosition()const;
 
@@ -93,7 +93,7 @@ namespace oglu
 		std::vector<IKeyboardListener*>	m_keyboardListeners;
 		std::vector<IMouseListener*>	m_mouseListeners;
 		GLFWwindow*						m_window;
-		GLbitfield						m_clearMode;							
+		GLbitfield						m_clearMode;
 	};
 }
 

@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/08 16:01:20 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/13 15:41:59 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/01/02 18:34:08 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int main( void )
 {
 	oglu::Window						render;
 
-	if (render.create(2880, 1800, "Test", false, oglu::ContextSettings(4, 1, 0)) == false)
+	if (render.create(2880, 1800, "Test", true, oglu::ContextSettings(4, 1, 0)) == false)
 	{
 		std::cerr << "Create window failed" << std::endl;
 		return (1);
