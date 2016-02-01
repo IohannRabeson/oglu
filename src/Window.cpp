@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:59:10 by irabeson          #+#    #+#             */
-/*   Updated: 2016/01/02 18:35:42 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 01:18:15 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,30 @@ namespace oglu
 		}
 	}
 
+	/*!	Create a Window instance. */
 	Window::Window() :
 		m_window(nullptr),
-		m_clearMode(GL_COLOR_BUFFER_BIT)
+		m_clearMode(ClearMode::ColorBuffer),
+		m_clearColor(0.f, 0.f, 0.f, 1.f)
 	{
 	}
 
+	/*!	Close the window. */
 	Window::~Window()
 	{
 		close();
 		glfwTerminate();
 	}
 
+	/*!	Create or recreate a window.
+	  	\param width The width of the window
+		\param height The height of the window
+		\param title Title displayed in the title bar
+		\param fullscreen Set true to enable fullscreen mode
+		\param settings OpenGL context settings
+		\return false if the window can't be created
+		\see ContextSettings
+	*/
 	bool	Window::create(int width, int height, std::string const& title,
 						   bool fullscreen, ContextSettings&& settings)
 	{
@@ -87,7 +99,7 @@ namespace oglu
 			{
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(GL_LESS); // TODO: remove (default value is GL_LESS)
-				m_clearMode |= GL_DEPTH_BUFFER_BIT;
+				m_clearMode = static_cast<ClearMode>(m_clearMode | ClearMode::DepthBuffer);
 			}
 			// TODO: when an Application class will comes this line
 			// will should be removed.
@@ -103,6 +115,7 @@ namespace oglu
 		return (isOk);
 	}
 
+	/*!	Close the window. */
 	void	Window::close()
 	{
 		if (m_window)
@@ -112,23 +125,61 @@ namespace oglu
 		}
 	}
 
+	/*! Return true if the window is open. */
 	bool	Window::isOpen()const
 	{
 		return (m_window != nullptr && glfwWindowShouldClose(m_window) == 0);
 	}
 
+	/*!	Clear the render by filling it with a color.
+
+	  	The mode and the color can be set with setClearColor() and setClearColor().
+	 */
 	void	Window::clear()
 	{
-		glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
-		glClear(m_clearMode);
+		glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], m_clearColor[3]);
+		glClear(static_cast<GLbitfield>(m_clearMode));
 	}
 
+	/*! Flush render to the screen. */
+	void	Window::display()
+	{
+		glfwSwapBuffers(m_window);
+	}
 
+	/*!	Poll events and dispatchs them. */
+	void	Window::pollEvents()
+	{
+		glfwPollEvents();
+	}
+
+	//								  //
+	// --- Properties --- 			  //
+	//								  //
+
+	/*!	Set the cursor mode. */
 	void	Window::setCursorMode(CursorMode mode)
 	{
 		glfwSetInputMode(m_window, GLFW_CURSOR, static_cast<int>(mode));
 	}
 
+	/*!
+		Set the buffers cleared when clear() is called.
+	*/
+	void	Window::setClearMode(ClearMode mode)
+	{
+		m_clearMode = mode;
+	}
+
+	/*!
+		Set the color used to fill the render.
+	*/
+	void	Window::setClearColor(glm::vec4 const& color)
+	{
+		m_clearColor = color;
+	}
+
+	/*!	Return the cursor position. */
 	glm::dvec2	Window::getCursorPosition()const
 	{
 		glm::dvec2	pos;
@@ -137,27 +188,25 @@ namespace oglu
 		return (pos);
 	}
 
+	/*!	Return the key state. */
 	bool	Window::isKeyPressed(int key)const
 	{
 		return (glfwGetKey(m_window, key));
 	}
 
+	/*!	Set the cursor position. */
 	void	Window::setCursorPosition(glm::dvec2 const& pos)
 	{
 		glfwSetCursorPos(m_window, pos.x, pos.y);
 	}
 
+	//								  //
+	// --- Listeners registration --- //
+	//								  //
 
-	void	Window::display()
-	{
-		glfwSwapBuffers(m_window);
-	}
-
-	void	Window::pollEvents()
-	{
-		glfwPollEvents();
-	}
-
+	/*!
+		Register an IWindowListener instance.
+	*/
 	void	Window::registerWindowListener(IWindowListener* listener)
 	{
 		if (std::find(m_windowListeners.begin(), m_windowListeners.end(), listener) == m_windowListeners.end())
@@ -166,6 +215,9 @@ namespace oglu
 		}
 	}
 
+	/*!
+		Unregister an IWindowListener instance.
+	*/
 	void	Window::unregisterWindowListener(IWindowListener* listener)
 	{
 		auto	it = std::find(m_windowListeners.begin(), m_windowListeners.end(), listener);
@@ -176,6 +228,9 @@ namespace oglu
 		}
 	}
 
+	/*!
+		Register an IKeyboardListener instance.
+	*/
 	void	Window::registerKeyboardListener(IKeyboardListener* listener)
 	{
 		if (std::find(m_keyboardListeners.begin(), m_keyboardListeners.end(), listener) == m_keyboardListeners.end())
@@ -184,6 +239,9 @@ namespace oglu
 		}
 	}
 
+	/*!
+		Unregister an IKeyboardListener instance.
+	*/
 	void	Window::unregisterKeyboardListener(IKeyboardListener* listener)
 	{
 		auto	it = std::find(m_keyboardListeners.begin(), m_keyboardListeners.end(), listener);
@@ -194,6 +252,9 @@ namespace oglu
 		}
 	}
 
+	/*!
+		Register an IMouseListener instance.
+	*/
 	void	Window::registerMouseListener(IMouseListener* listener)
 	{
 		if (std::find(m_mouseListeners.begin(), m_mouseListeners.end(), listener) == m_mouseListeners.end())
@@ -202,6 +263,9 @@ namespace oglu
 		}
 	}
 
+	/*!
+		Unregister an IMouseListener instance.
+	*/
 	void	Window::unregisterMouseListener(IMouseListener* listener)
 	{
 		auto	it = std::find(m_mouseListeners.begin(), m_mouseListeners.end(), listener);

@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/10 20:00:03 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 21:52:38 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 01:19:42 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ namespace oglu
 	class IMouseListener
 	{
 	public:
-		virtual ~IMouseListener();
+		virtual ~IMouseListener()
+		{
+		}
 
 		virtual void	onMouseMoved(double x, double y) = 0;
 		virtual void	onMouseEntered() = 0;

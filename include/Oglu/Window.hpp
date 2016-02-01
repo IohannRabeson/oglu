@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:41:20 by irabeson          #+#    #+#             */
-/*   Updated: 2016/01/02 18:36:15 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 01:12:38 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,50 @@ namespace oglu
 	class IKeyboardListener;
 	class IMouseListener;
 
+	/*!
+	  	\brief Manage a window on screen
+
+		To initialize a window call create().<br>
+		Window can be closed by calling close() method.<br>
+		<h2>Events dispatch</h2>
+		The window own the responsability of dispatching events to listeners.<br>
+		Events dispatch must be triggered by the user each frame by calling pollEvents().
+
+		<h2>Drawing</h2>
+		Before all render must be cleaned by calling clear().<br>
+		Then draw with OpenGL and call display() to render to the screen.<br>
+		\see IWindowListener, IKeyboardListener and IMouseListener
+
+		<h2>Typical main loop</h2>
+		The following listing show a typical main loop.<br>
+		\code
+		oglu::Window						render;
+
+		if (render.create(2880, 1800, "Test", false, oglu::ContextSettings(4, 1, 0)) == false)
+		{
+			std::cerr << "Create window failed" << std::endl;
+			return (1);
+		}
+		try
+		{
+			while (render.isOpen())
+			{
+				render.pollEvents();
+				render.clear();
+				// Draw here...
+				render.display();
+			}
+		}
+		catch (std::runtime_error const& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+		GL_CHECK( glDeleteBuffers(1, &vertexBuffer) );
+		GL_CHECK( glDeleteBuffers(1, &colorBuffer) );
+		GL_CHECK( glDeleteVertexArrays(1, &VertexArrayID) );
+		return (0);
+		\endcode
+	*/
 	class Window
 	{
 	public:
@@ -36,6 +80,13 @@ namespace oglu
 			Enabled = GLFW_CURSOR_NORMAL,
 			Hidden = GLFW_CURSOR_HIDDEN,
 			Disabled = GLFW_CURSOR_DISABLED
+		};
+
+		enum ClearMode
+		{
+			ColorBuffer = GL_COLOR_BUFFER_BIT,
+			DepthBuffer = GL_DEPTH_BUFFER_BIT,
+			StencilBuffer = GL_STENCIL_BUFFER_BIT
 		};
 
 		Window();
@@ -53,6 +104,8 @@ namespace oglu
 		void		pollEvents();
 
 		void		setCursorMode(CursorMode mode);
+		void		setClearMode(ClearMode mode);
+		void		setClearColor(glm::vec4 const& color);
 
 		void		setCursorPosition(glm::dvec2 const& pos);
 		glm::dvec2	getCursorPosition()const;
@@ -93,7 +146,8 @@ namespace oglu
 		std::vector<IKeyboardListener*>	m_keyboardListeners;
 		std::vector<IMouseListener*>	m_mouseListeners;
 		GLFWwindow*						m_window;
-		GLbitfield						m_clearMode;
+		ClearMode						m_clearMode;
+		glm::vec4						m_clearColor;
 	};
 }
 

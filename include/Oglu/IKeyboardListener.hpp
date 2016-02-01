@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/29 04:01:44 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 20:38:36 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 01:19:58 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 namespace oglu
 {
+	/*!
+		\brief Listener for key pressed and key released events.
+	*/
 	class IKeyboardListener
 	{
 	public:
