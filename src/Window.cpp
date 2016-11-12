@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:59:10 by irabeson          #+#    #+#             */
-/*   Updated: 2016/02/01 01:18:15 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 02:22:18 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ namespace oglu
 	/*!
 		Set the buffers cleared when clear() is called.
 	*/
-	void	Window::setClearMode(ClearMode mode)
+	void	Window::setClearMode(ClearModes mode)
 	{
 		m_clearMode = mode;
 	}
@@ -316,7 +316,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyKeyPressed(int key, KeyModifier modifiers)
+	void	Window::notifyKeyPressed(int key, KeyModifiers modifiers)
 	{
 		for (auto* listener : m_keyboardListeners)
 		{
@@ -324,7 +324,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyKeyReleased(int key, KeyModifier modifiers)
+	void	Window::notifyKeyReleased(int key, KeyModifiers modifiers)
 	{
 		for (auto* listener : m_keyboardListeners)
 		{
@@ -356,7 +356,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMousePressed(MouseButton button, KeyModifier modifiers)
+	void	Window::notifyMousePressed(MouseButton button, KeyModifiers modifiers)
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -364,7 +364,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMouseReleased(MouseButton button, KeyModifier modifiers)
+	void	Window::notifyMouseReleased(MouseButton button, KeyModifiers modifiers)
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -418,10 +418,10 @@ namespace oglu
 		switch (action)
 		{
 			case GLFW_PRESS:
-				render->notifyKeyPressed(key, static_cast<KeyModifier>(modifiers));
+				render->notifyKeyPressed(key, modifiers);
 				break;
 			case GLFW_RELEASE:
-				render->notifyKeyReleased(key, static_cast<KeyModifier>(modifiers));
+				render->notifyKeyReleased(key, modifiers);
 				break;
 			default:
 				break;
@@ -456,12 +456,10 @@ namespace oglu
 		switch(action)
 		{
 		case GLFW_PRESS:
-			render->notifyMousePressed(static_cast<MouseButton>(button),
-									   static_cast<KeyModifier>(modifiers));
+			render->notifyMousePressed(static_cast<MouseButton>(button), modifiers);
 			break;
 		case GLFW_RELEASE:
-			render->notifyMouseReleased(static_cast<MouseButton>(button),
-									    static_cast<KeyModifier>(modifiers));
+			render->notifyMouseReleased(static_cast<MouseButton>(button), modifiers);
 			break;
 		default:
 			break;

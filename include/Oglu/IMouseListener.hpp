@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/10 20:00:03 by irabeson          #+#    #+#             */
-/*   Updated: 2016/02/01 01:19:42 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 02:16:49 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ namespace oglu
 		virtual void	onMouseMoved(double x, double y) = 0;
 		virtual void	onMouseEntered() = 0;
 		virtual void	onMouseLeaved() = 0;
-		virtual void	onMousePressed(MouseButton button, KeyModifier modifiers) = 0;
-		virtual void	onMouseReleased(MouseButton button, KeyModifier modifiers) = 0;
+		virtual void	onMousePressed(MouseButton button, KeyModifiers modifiers) = 0;
+		virtual void	onMouseReleased(MouseButton button, KeyModifiers modifiers) = 0;
 	};
 }
 

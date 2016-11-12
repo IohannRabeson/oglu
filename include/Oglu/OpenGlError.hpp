@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/06 17:41:39 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/08 16:46:28 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 02:13:07 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 # include <iostream>
 # include <iomanip>
 
+/*!
+	\def GL_CHECK( expression )
+	\brief Display information when an OpenGL error occurs.
+
+	This macro has no effects in Release mode, expression is executed errors
+	are not tracked.
+
+	Function glGetError() is used be carefull do not call this function yourself.
+ */
 # if ! defined NDEBUG
 # 	define GL_CHECK( expression ) expression; checkGlError(__FILE__, __LINE__);
 # else

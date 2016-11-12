@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/08 16:01:20 by irabeson          #+#    #+#             */
-/*   Updated: 2016/02/01 01:22:37 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/05 19:54:49 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ int main( void )
 {
 	oglu::Window						render;
 
+	render.setClearMode(oglu::Window::ColorBuffer | oglu::Window::DepthBuffer);
 	if (render.create(2880, 1800, "Test", false, oglu::ContextSettings(4, 1, 0)) == false)
 	{
 		std::cerr << "Create window failed" << std::endl;
@@ -250,4 +251,3 @@ int main( void )
 	GL_CHECK( glDeleteVertexArrays(1, &VertexArrayID) );
 	return (0);
 }
-

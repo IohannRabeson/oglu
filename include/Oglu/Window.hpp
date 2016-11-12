@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/08/28 22:41:20 by irabeson          #+#    #+#             */
-/*   Updated: 2016/02/01 01:12:38 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 02:19:02 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "Oglu/ContextSettings.hpp"
 # include "Oglu/KeyModifier.hpp"
 # include "Oglu/MouseButton.hpp"
-
+# include "Oglu/Flags.hpp"
 # include <glm/glm.hpp>
 
 # include <string>
@@ -82,12 +82,15 @@ namespace oglu
 			Disabled = GLFW_CURSOR_DISABLED
 		};
 
+		/*!	Flags to define which buffers are cleared. */
 		enum ClearMode
 		{
 			ColorBuffer = GL_COLOR_BUFFER_BIT,
 			DepthBuffer = GL_DEPTH_BUFFER_BIT,
 			StencilBuffer = GL_STENCIL_BUFFER_BIT
 		};
+
+		typedef Flags<ClearMode, GLbitfield>	ClearModes;
 
 		Window();
 		~Window();
@@ -104,7 +107,7 @@ namespace oglu
 		void		pollEvents();
 
 		void		setCursorMode(CursorMode mode);
-		void		setClearMode(ClearMode mode);
+		void		setClearMode(ClearModes mode);
 		void		setClearColor(glm::vec4 const& color);
 
 		void		setCursorPosition(glm::dvec2 const& pos);
@@ -125,12 +128,12 @@ namespace oglu
 		void		notifyWindowResized(int width, int height);
 		void		notifyWindowFocusGained();
 		void		notifyWindowFocusLost();
-		void		notifyKeyPressed(int key, KeyModifier modifiers);
-		void		notifyKeyReleased(int key, KeyModifier modifiers);
+		void		notifyKeyPressed(int key, KeyModifiers modifiers);
+		void		notifyKeyReleased(int key, KeyModifiers modifiers);
 		void		notifyMouseEntered();
 		void		notifyMouseLeaved();
-		void		notifyMousePressed(MouseButton button, KeyModifier modifiers);
-		void		notifyMouseReleased(MouseButton button, KeyModifier modifiers);
+		void		notifyMousePressed(MouseButton button, KeyModifiers modifiers);
+		void		notifyMouseReleased(MouseButton button, KeyModifiers modifiers);
 		void		notifyMouseMoved(double x, double y);
 
 		static void	windowClosedCallback(GLFWwindow* window);

@@ -1,12 +1,12 @@
 find_package(Boost 1.55 REQUIRED COMPONENTS system unit_test_framework)
 
-include_directories(include ${Boost_INCLUDE_DIR})
+include_directories(include ${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIR})
 
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-set(TESTED_INC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
-set(TESTED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../src)
+set(TESTED_INC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(TESTED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(SRC
 	${SRC_DIR}/main.cpp
@@ -18,6 +18,7 @@ set(SRC_TESTED
 
 # Put here your hpp and cpp of tests
 set(SRC_TEST
+	${SRC_DIR}/TestBuffer.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/tests)
@@ -34,12 +35,12 @@ foreach(SRC_FILE ${SRC_TEST})
 
         #link to Boost libraries and other targets and dependencies
         target_link_libraries(${TEST_NAME} ${Boost_LIBRARIES})
-		target_link_libraries(${TEST_NAME} oglu)
+		target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
 
-		#Finally add it to test execution - 
+		#Finally add it to test execution -
         #Notice the WORKING_DIRECTORY and COMMAND
-        add_test(NAME ${TEST_NAME} 
-                 WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH} 
+        add_test(NAME ${TEST_NAME}
+                 WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
                  COMMAND ${TEST_NAME}
         )
 endforeach(SRC_FILE)

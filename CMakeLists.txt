@@ -52,6 +52,7 @@ set(SRC
 	${INC_DIR}/IKeyboardListener.hpp
 	${INC_DIR}/IWindowListener.hpp
 	${INC_DIR}/Camera.hpp
+	${INC_DIR}/Buffer.hpp
 
 	${SRC_DIR}/Program.cpp
 	${SRC_DIR}/Window.cpp

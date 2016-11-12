@@ -6,7 +6,7 @@
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/06 21:06:53 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/12 10:38:41 by irabeson         ###   ########.fr       */
+/*   Updated: 2016/02/01 02:36:57 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ namespace oglu
 	template <GLenum Type>
 	class Shader;
 
+	/*!
+		\brief Represents fully processed executable code.
+	 */
 	class Program
 	{
 	public:
@@ -48,22 +51,22 @@ namespace oglu
 		void		setUniform(std::string const& name, float v0, float v1);
 		void		setUniform(std::string const& name, float v0, float v1, float v2);
 		void		setUniform(std::string const& name, float v0, float v1, float v2, float v3);
-		void		setUniform(std::string const& name, float const* array, std::size_t size); 
-		void		setUniform(std::string const& name, std::vector<float> const& array); 
+		void		setUniform(std::string const& name, float const* array, std::size_t size);
+		void		setUniform(std::string const& name, std::vector<float> const& array);
 
 		void		setUniform(std::string const& name, int v0);
 		void		setUniform(std::string const& name, int v0, int v1);
 		void		setUniform(std::string const& name, int v0, int v1, int v2);
 		void		setUniform(std::string const& name, int v0, int v1, int v2, int v3);
-		void		setUniform(std::string const& name, int const* array, std::size_t size); 
-		void		setUniform(std::string const& name, std::vector<int> const& array); 
+		void		setUniform(std::string const& name, int const* array, std::size_t size);
+		void		setUniform(std::string const& name, std::vector<int> const& array);
 
 		void		setUniform(std::string const& name, unsigned int v0);
 		void		setUniform(std::string const& name, unsigned int v0, unsigned int v1);
 		void		setUniform(std::string const& name, unsigned int v0, unsigned int v1, unsigned int v2);
 		void		setUniform(std::string const& name, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3);
-		void		setUniform(std::string const& name, unsigned int const* array, std::size_t size); 
-		void		setUniform(std::string const& name, std::vector<unsigned int> const& array); 
+		void		setUniform(std::string const& name, unsigned int const* array, std::size_t size);
+		void		setUniform(std::string const& name, std::vector<unsigned int> const& array);
 
 		void		setUniform(std::string const& name, glm::vec2 const& vec);
 		void		setUniform(std::string const& name, glm::vec3 const& vec);
