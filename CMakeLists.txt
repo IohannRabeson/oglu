@@ -45,6 +45,7 @@ set(SRC
     ${INC_DIR}/Generics/StrongInteger.hpp
 
     ${INC_DIR}/Graphics/Shader.hpp
+    ${INC_DIR}/Graphics/AShaderLoader.hpp
     ${INC_DIR}/Graphics/Shader.hxx
     ${INC_DIR}/Graphics/ShaderCompilationException.hpp
     ${INC_DIR}/Graphics/Program.hpp
@@ -58,6 +59,7 @@ set(SRC
     ${INC_DIR}/Window/IWindowListener.hpp
 
     ${SRC_DIR}/Graphics/Program.cpp
+    ${SRC_DIR}/Graphics/AShaderLoader.cpp
     ${SRC_DIR}/Graphics/ShaderCompilationException.cpp
     ${SRC_DIR}/Graphics/ProgramLinkException.cpp
     ${SRC_DIR}/Graphics/Camera.cpp

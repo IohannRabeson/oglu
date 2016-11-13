@@ -21,6 +21,7 @@
 
 # include <string>
 # include <vector>
+# include <memory>
 
 namespace oglu
 {
@@ -89,11 +90,16 @@ namespace oglu
 		static void	mouseFocusCallback(GLFWwindow* window, int entered);
 		static void	mouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers);
 	private:
-		std::vector<IWindowListener*>	m_windowListeners;
+        struct WindowDeleter
+        {
+            void operator()(GLFWwindow* window);
+        };
+
+        std::vector<IWindowListener*> m_windowListeners;
 		std::vector<IKeyboardListener*>	m_keyboardListeners;
-		std::vector<IMouseListener*>	m_mouseListeners;
-		GLFWwindow*						m_window;
-		GLbitfield						m_clearMode;
+        std::vector<IMouseListener*> m_mouseListeners;
+        std::unique_ptr<GLFWwindow, WindowDeleter> m_window;
+        GLbitfield m_clearMode;
 	};
 }
 

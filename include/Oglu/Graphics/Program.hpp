@@ -18,26 +18,46 @@
 # include <string>
 # include <vector>
 # include <array>
+# include <map>
+# include <functional>
 
 # include <glm/glm.hpp>
 
 namespace oglu
 {
-    using UniformId = StrongInteger<GLint, struct UniformTag>;
-    using AttributeId = StrongInteger<GLint, struct AttributeTag>;
+    enum class ShaderType : GLenum;
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	class Shader;
 
 	class Program
 	{
 	public:
+        struct UniformInfo
+        {
+            std::string const name; ///< \brief Parameter name
+            UniformId identifier; ///< \brief Parameter identifier
+            GLint const size; ///< \brief Parameter size
+            GLenum const type; ///< \brief Parameter type
+        };
+
 		Program();
 		~Program();
 
         GLuint getId()const;
 
-		template <GLenum ... Types>
+        /*!
+         *  Links shaders.
+         *
+         *  Informations about uniforms are also gathered.
+         *  \code
+         *  program.link(vertexShader, fragmentShader);
+         *  program.link(fragmentShader, vertexShader);
+         *  program.link(vertexShader);
+         *  program.link(fragmentShader);
+         *  \endcode
+         */
+        template <ShaderType ... Types>
         void link(Shader<Types> const& ... shaders);
 
 		std::string getInfoLog()const;
@@ -45,28 +65,29 @@ namespace oglu
         void use();
         void unuse();
 
-        UniformId getUniformLocation(std::string const& name)const;
         AttributeId getAttributeLocation(std::string const& name)const;
+
+        UniformId getUniformLocation(std::string const& name)const;
 
         void setUniform(UniformId id, float v0);
         void setUniform(UniformId id, float v0, float v1);
         void setUniform(UniformId id, float v0, float v1, float v2);
         void setUniform(UniformId id, float v0, float v1, float v2, float v3);
-        void setUniform(UniformId id, float const* array, std::size_t size);
+        void setUniform(UniformId id, float const* array, GLsizei size);
         void setUniform(UniformId id, std::vector<float> const& array);
 
         void setUniform(UniformId id, int v0);
         void setUniform(UniformId id, int v0, int v1);
         void setUniform(UniformId id, int v0, int v1, int v2);
         void setUniform(UniformId id, int v0, int v1, int v2, int v3);
-        void setUniform(UniformId id, int const* array, std::size_t size);
+        void setUniform(UniformId id, int const* array, GLsizei size);
         void setUniform(UniformId id, std::vector<int> const& array);
 
         void setUniform(UniformId id, unsigned int v0);
         void setUniform(UniformId id, unsigned int v0, unsigned int v1);
         void setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2);
         void setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3);
-        void setUniform(UniformId id, unsigned int const* array, std::size_t size);
+        void setUniform(UniformId id, unsigned int const* array, GLsizei size);
         void setUniform(UniformId id, std::vector<unsigned int> const& array);
 
         void setUniform(UniformId id, glm::vec2 const& vec);
@@ -85,26 +106,32 @@ namespace oglu
         void setUniform(UniformId id, glm::mat3 const& mat);
         void setUniform(UniformId id, glm::mat4 const& mat);
 
-        /*!
-         *  Overload dedicated to unform array.
-         */
+        /*! Overload dedicated to unform array. */
 		template <class T, std::size_t N>
-        void		setUniform(UniformId id, std::array<T, N> const& array);
+        void setUniform(UniformId id, std::array<T, N> const& array);
+
+        /*! Iterate on each uniform's information gathered while linking. */
+        void forEachUniformInfo(std::function<void(UniformInfo const&)> &&f)const;
 	private:
-		template <GLenum Type, GLenum ... Types>
+        template <ShaderType Type, ShaderType ... Types>
 		inline void	attachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
 
-		template <GLenum Type>
+        template <ShaderType Type>
 		inline void	attachImp(Shader<Type> const& shader);
 
-		template <GLenum Type, GLenum ... Types>
+        template <ShaderType Type, ShaderType ... Types>
 		inline void	detachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
 
-		template <GLenum Type>
+        template <ShaderType Type>
 		inline void	detachImp(Shader<Type> const& shader);
+
+        void gatherUniformInfos();
 	private:
-        GLuint m_programId;
-        bool m_enabled = false;
+        std::map<std::string, UniformId> m_uniformIdentifiers;
+        std::map<UniformId, UniformInfo> m_uniformInfo;
+
+        ProgramId const m_programId;
+        bool m_used = false;
 	};
 }
 

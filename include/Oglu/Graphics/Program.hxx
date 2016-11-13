@@ -14,45 +14,46 @@
 
 namespace oglu
 {
-	template <GLenum ... Types>
+    template <ShaderType ... Types>
 	void	Program::link(Shader<Types> const& ... shaders)
 	{
 		GLint	result = GL_FALSE;
 		
 		attachImp(shaders...);	
-		glLinkProgram(m_programId);
-		glGetProgramiv(m_programId, GL_LINK_STATUS, &result);
+        glLinkProgram(oglu::get(m_programId));
+        glGetProgramiv(oglu::get(m_programId), GL_LINK_STATUS, &result);
 		detachImp(shaders...);
 		if (result == GL_FALSE)
 		{
 			throw ProgramLinkException(getInfoLog());
 		}
+        gatherUniformInfos();
 	}
 
-	template <GLenum Type, GLenum ... Types>
+    template <ShaderType Type, ShaderType ... Types>
 	void	Program::attachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders)
 	{
 		attachImp(shader);
 		attachImp(shaders...);
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	void	Program::attachImp(Shader<Type> const& shader)
 	{
-		glAttachShader(m_programId, shader.getId());
+        glAttachShader(oglu::get(m_programId), oglu::get(shader.getId()));
 	}
 
-	template <GLenum Type, GLenum ... Types>
+    template <ShaderType Type, ShaderType ... Types>
 	void	Program::detachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders)
 	{
 		detachImp(shader);
 		detachImp(shaders...);
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	void	Program::detachImp(Shader<Type> const& shader)
 	{
-		glDetachShader(m_programId, shader.getId());
+        glDetachShader(oglu::get(m_programId), oglu::get(shader.getId()));
 	}
 
     template <class T, std::size_t N>

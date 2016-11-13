@@ -17,44 +17,44 @@
 namespace oglu
 {
 	Program::Program() :
-		m_programId(0u)
+        m_programId(glCreateProgram())
 	{
-		GL_CHECK( m_programId = glCreateProgram() );
+        checkGlError(__FILE__, __LINE__);
 	}
 
 	Program::~Program()
 	{
 		if (m_programId != 0u)
 		{
-			GL_CHECK( glDeleteProgram(m_programId) );
+            GL_CHECK( glDeleteProgram(oglu::get(m_programId)) );
 		}
 	}
 
 	GLuint	Program::getId()const
 	{
-		return (m_programId);
+        return (oglu::get(m_programId));
 	}
 
-	void	Program::use()
+    void Program::use()
 	{
-        m_enabled = true;
-		GL_CHECK( glUseProgram(m_programId) );
+        m_used = true;
+        GL_CHECK( glUseProgram(oglu::get(m_programId)) );
 	}
 
-	void	Program::unuse()
+    void Program::unuse()
 	{
-        m_enabled = false;
+        m_used = false;
 		GL_CHECK( glUseProgram(0u) );
 	}
 
     UniformId Program::getUniformLocation(std::string const& name)const
 	{
-		return (glGetUniformLocation(m_programId, name.c_str()));
+        return (glGetUniformLocation(oglu::get(m_programId), name.c_str()));
 	}
 
     AttributeId Program::getAttributeLocation(std::string const& name)const
 	{
-		return (glGetAttribLocation(m_programId, name.c_str()));
+        return (glGetAttribLocation(oglu::get(m_programId), name.c_str()));
 	}
 
 	std::string Program::getInfoLog()const
@@ -62,12 +62,12 @@ namespace oglu
 		std::string	result;
 		GLsizei		length = 0u;
 
-		glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &length);
+        glGetProgramiv(oglu::get(m_programId), GL_INFO_LOG_LENGTH, &length);
 		if (length > 0)
 		{
-			char	buffer[length + 1];
+            char buffer[length + 1];
 
-			glGetProgramInfoLog(m_programId, length, nullptr, buffer);
+            glGetProgramInfoLog(oglu::get(m_programId), length, nullptr, buffer);
 			result.assign(buffer);
 			if (result.back() == '\n')
 			{
@@ -77,214 +77,247 @@ namespace oglu
 		return (result);
 	}
 
-    void	Program::setUniform(UniformId id, float v0)
+    void Program::setUniform(UniformId id, float v0)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform1f(id, v0);
+        glUniform1f(oglu::get(id), v0);
 	}
 
-    void	Program::setUniform(UniformId id, float v0, float v1)
+    void Program::setUniform(UniformId id, float v0, float v1)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform2f(id, v0, v1);
+        glUniform2f(oglu::get(id), v0, v1);
 	}
 
-    void	Program::setUniform(UniformId id, float v0, float v1, float v2)
+    void Program::setUniform(UniformId id, float v0, float v1, float v2)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform3f(id, v0, v1, v2);
+        glUniform3f(oglu::get(id), v0, v1, v2);
 	}
 
-    void	Program::setUniform(UniformId id, float v0, float v1, float v2, float v3)
+    void Program::setUniform(UniformId id, float v0, float v1, float v2, float v3)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform4f(id, v0, v1, v2, v3);
-	}
-	
-    void	Program::setUniform(UniformId id, float const* array, std::size_t size)
-	{
-        assert(m_enabled);
-
-        glUniform1fv(id, size, array);
+        glUniform4f(oglu::get(id), v0, v1, v2, v3);
 	}
 	
-    void	Program::setUniform(UniformId id, std::vector<float> const& array)
+    void Program::setUniform(UniformId id, float const* array, GLsizei size)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform1fv(id, array.size(), array.data());
-	}
-
-    void	Program::setUniform(UniformId id, int v0)
-	{
-        assert(m_enabled);
-
-        glUniform1i(id, v0);
-	}
-
-    void	Program::setUniform(UniformId id, int v0, int v1)
-	{
-        assert(m_enabled);
-
-        glUniform2i(id, v0, v1);
-	}
-
-    void	Program::setUniform(UniformId id, int v0, int v1, int v2)
-	{
-        assert(m_enabled);
-
-        glUniform3i(id, v0, v1, v2);
-	}
-
-    void	Program::setUniform(UniformId id, int v0, int v1, int v2, int v3)
-	{
-        assert(m_enabled);
-
-        glUniform4i(id, v0, v1, v2, v3);
-	}
-
-    void	Program::setUniform(UniformId id, int const* array, std::size_t size)
-	{
-        assert(m_enabled);
-
-        glUniform1iv(id, size, array);
+        glUniform1fv(oglu::get(id), size, array);
 	}
 	
-    void	Program::setUniform(UniformId id, std::vector<int> const& array)
+    void Program::setUniform(UniformId id, std::vector<float> const& array)
 	{
-        assert(m_enabled);
+        assert(m_used);
+        assert(array.size() <= std::numeric_limits<GLsizei>::max());
 
-        glUniform1iv(id, array.size(), array.data());
+        glUniform1fv(oglu::get(id), static_cast<GLsizei>(array.size()), array.data());
 	}
 
-
-    void	Program::setUniform(UniformId id, unsigned int v0)
+    void Program::setUniform(UniformId id, int v0)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform1ui(id, v0);
+        glUniform1i(oglu::get(id), v0);
 	}
 
-    void	Program::setUniform(UniformId id, unsigned int v0, unsigned int v1)
+    void Program::setUniform(UniformId id, int v0, int v1)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform2ui(id, v0, v1);
+        glUniform2i(oglu::get(id), v0, v1);
 	}
 
-    void	Program::setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2)
+    void Program::setUniform(UniformId id, int v0, int v1, int v2)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform3ui(id, v0, v1, v2);
+        glUniform3i(oglu::get(id), v0, v1, v2);
 	}
 
-    void	Program::setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3)
+    void Program::setUniform(UniformId id, int v0, int v1, int v2, int v3)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform4ui(id, v0, v1, v2, v3);
+        glUniform4i(oglu::get(id), v0, v1, v2, v3);
 	}
 
-    void	Program::setUniform(UniformId id, unsigned int const* array, std::size_t size)
+    void Program::setUniform(UniformId id, int const* array, GLsizei size)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform1uiv(id, size, array);
+        glUniform1iv(oglu::get(id), size, array);
 	}
 	
-    void	Program::setUniform(UniformId id, std::vector<unsigned int> const& array)
+    void Program::setUniform(UniformId id, std::vector<int> const& array)
 	{
-        assert(m_enabled);
+        assert(m_used);
+        assert(array.size() <= std::numeric_limits<GLsizei>::max());
 
-        glUniform1uiv(id, array.size(), array.data());
+        glUniform1iv(oglu::get(id), static_cast<GLsizei>(array.size()), array.data());
 	}
 
-    void	Program::setUniform(UniformId id, glm::vec2 const& vec)
-	{
-        assert(m_enabled);
 
-        glUniform2fv(id, 1u, glm::value_ptr(vec));
+    void Program::setUniform(UniformId id, unsigned int v0)
+	{
+        assert(m_used);
+
+        glUniform1ui(oglu::get(id), v0);
 	}
 
-    void	Program::setUniform(UniformId id, glm::vec3 const& vec)
+    void Program::setUniform(UniformId id, unsigned int v0, unsigned int v1)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform3fv(id, 1u, glm::value_ptr(vec));
+        glUniform2ui(oglu::get(id), v0, v1);
 	}
 
-    void	Program::setUniform(UniformId id, glm::vec4 const& vec)
+    void Program::setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform4fv(id, 1u, glm::value_ptr(vec));
+        glUniform3ui(oglu::get(id), v0, v1, v2);
 	}
 
-    void	Program::setUniform(UniformId id, glm::ivec2 const& vec)
+    void Program::setUniform(UniformId id, unsigned int v0, unsigned int v1, unsigned int v2, unsigned int v3)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform2iv(id, 1u, glm::value_ptr(vec));
+        glUniform4ui(oglu::get(id), v0, v1, v2, v3);
 	}
 
-    void	Program::setUniform(UniformId id, glm::ivec3 const& vec)
+    void Program::setUniform(UniformId id, unsigned int const* array, GLsizei size)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform3iv(id, 1u, glm::value_ptr(vec));
+        glUniform1uiv(oglu::get(id), size, array);
+	}
+	
+    void Program::setUniform(UniformId id, std::vector<unsigned int> const& array)
+	{
+        assert(m_used);
+        assert(array.size() <= std::numeric_limits<GLsizei>::max());
+
+        glUniform1uiv(oglu::get(id), static_cast<GLsizei>(array.size()), array.data());
 	}
 
-    void	Program::setUniform(UniformId id, glm::ivec4 const& vec)
+    void Program::setUniform(UniformId id, glm::vec2 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform4iv(id, 1u, glm::value_ptr(vec));
+        glUniform2fv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::uvec2 const& vec)
+    void Program::setUniform(UniformId id, glm::vec3 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform2uiv(id, 1u, glm::value_ptr(vec));
+        glUniform3fv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::uvec3 const& vec)
+    void Program::setUniform(UniformId id, glm::vec4 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform3uiv(id, 1u, glm::value_ptr(vec));
+        glUniform4fv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::uvec4 const& vec)
+    void Program::setUniform(UniformId id, glm::ivec2 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniform4uiv(id, 1u, glm::value_ptr(vec));
+        glUniform2iv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::mat2 const& mat)
+    void Program::setUniform(UniformId id, glm::ivec3 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniformMatrix2fv(id, 1u, GL_FALSE, glm::value_ptr(mat));
+        glUniform3iv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::mat3 const& mat)
+    void Program::setUniform(UniformId id, glm::ivec4 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniformMatrix3fv(id, 1u, GL_FALSE, glm::value_ptr(mat));
+        glUniform4iv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
 
-    void	Program::setUniform(UniformId id, glm::mat4 const& mat)
+    void Program::setUniform(UniformId id, glm::uvec2 const& vec)
 	{
-        assert(m_enabled);
+        assert(m_used);
 
-        glUniformMatrix4fv(id, 1u, GL_FALSE, glm::value_ptr(mat));
+        glUniform2uiv(oglu::get(id), 1u, glm::value_ptr(vec));
 	}
+
+    void Program::setUniform(UniformId id, glm::uvec3 const& vec)
+	{
+        assert(m_used);
+
+        glUniform3uiv(oglu::get(id), 1u, glm::value_ptr(vec));
+	}
+
+    void Program::setUniform(UniformId id, glm::uvec4 const& vec)
+	{
+        assert(m_used);
+
+        glUniform4uiv(oglu::get(id), 1u, glm::value_ptr(vec));
+	}
+
+    void Program::setUniform(UniformId id, glm::mat2 const& mat)
+	{
+        assert(m_used);
+
+        glUniformMatrix2fv(oglu::get(id), 1u, GL_FALSE, glm::value_ptr(mat));
+	}
+
+    void Program::setUniform(UniformId id, glm::mat3 const& mat)
+	{
+        assert(m_used);
+
+        glUniformMatrix3fv(oglu::get(id), 1u, GL_FALSE, glm::value_ptr(mat));
+	}
+
+    void Program::setUniform(UniformId id, glm::mat4 const& mat)
+	{
+        assert(m_used);
+
+        glUniformMatrix4fv(oglu::get(id), 1u, GL_FALSE, glm::value_ptr(mat));
+    }
+
+    void Program::forEachUniformInfo(std::function<void (const Program::UniformInfo &)> &&f) const
+    {
+        for (auto const& kv : m_uniformInfo)
+        {
+            f(kv.second);
+        }
+    }
+
+    void Program::gatherUniformInfos()
+    {
+        GLuint count = 0;
+        GLsizei const bufferSize = 256;
+        GLsizei bufferLength = 0;
+        std::unique_ptr<char[]> buffer(new char[bufferSize]);
+
+        glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count));
+        for (auto i = 0u; i < count; ++i)
+        {
+            GLint size = 0;
+            GLenum type = 0;
+
+            glGetActiveUniform(oglu::get(m_programId), i, bufferSize, &bufferLength, &size, &type, buffer.get());
+
+            std::string const name{buffer.get()};
+
+            m_uniformIdentifiers.emplace(name, UniformId{i});
+            m_uniformInfo.emplace(UniformId{i}, UniformInfo{name, UniformId{i}, size, type});
+        }
+    }
 }

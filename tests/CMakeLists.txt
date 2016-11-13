@@ -19,6 +19,7 @@ set(SRC_TESTED
 # Put here your hpp and cpp of tests
 set(SRC_TEST
     ${SRC_DIR}/StrongIntegerTest.cpp
+    ${SRC_DIR}/ProgramTest.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/tests)
@@ -35,7 +36,7 @@ foreach(SRC_FILE ${SRC_TEST})
 
         #link to Boost libraries and other targets and dependencies
         target_link_libraries(${TEST_NAME} ${Boost_LIBRARIES})
-		target_link_libraries(${TEST_NAME} oglu)
+                target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
 
 		#Finally add it to test execution - 
         #Notice the WORKING_DIRECTORY and COMMAND

@@ -15,16 +15,34 @@
 
 #include <Oglu/Generics/StrongInteger.hpp>
 
+template <class T, class Tag>
+static inline std::ostream& operator << (std::ostream& os, oglu::StrongInteger<T, Tag> const& value)
+{
+    os << static_cast<T>(value);
+    return os;
+}
+
+namespace boost{ namespace test_tools{ namespace tt_detail{
+template<class T>
+struct print_log_value<oglu::StrongInteger<T>> {
+    void    operator()( std::ostream& os, oglu::StrongInteger<T> const& value)
+    {
+        os << oglu::get(value);
+    }
+};
+}}}
+
 typedef boost::mpl::list<int,long,unsigned char, std::uint32_t> IntegralTypes;
 
 BOOST_AUTO_TEST_SUITE(strong_integer)
+
 
 BOOST_AUTO_TEST_CASE_TEMPLATE( conversion_strong_to_value, T, IntegralTypes )
 {
     using StrongInt = oglu::StrongInteger<T>;
 
-    static_assert(std::is_same<typename oglu::UnderlyingType<StrongInt>::Type, T>::value, "UnderlyingType doesn't work");
-    static_assert(std::is_convertible<StrongInt, T>::value, "not convertible");
+    static_assert(std::is_same<typename oglu::UnderlyingType<StrongInt>, T>::value, "UnderlyingType doesn't work");
+    //static_assert(std::is_convertible<StrongInt, T>::value, "not convertible");
     static_assert(std::is_assignable<StrongInt, T>::value, "not assignable");
 }
 
@@ -33,15 +51,15 @@ BOOST_AUTO_TEST_CASE( comparisons )
     oglu::StrongInteger<int> const v0(0);
     oglu::StrongInteger<int> const v1(1);
 
-	BOOST_TEST(v0 == v0);
-	BOOST_TEST(v1 == v1);
-	BOOST_TEST(v0 != v1);
-	BOOST_TEST(v0 < v1);
-	BOOST_TEST(v1 > v0);
-	BOOST_TEST(v0 <= v1);
-	BOOST_TEST(v1 >= v0);
-	BOOST_TEST(v0 <= v0);
-	BOOST_TEST(v1 >= v1);
+    BOOST_TEST((v0 == v0));
+    BOOST_TEST((v1 == v1));
+    BOOST_TEST((v0 != v1));
+    BOOST_TEST((v0 < v1));
+    BOOST_TEST((v1 > v0));
+    BOOST_TEST((v0 <= v1));
+    BOOST_TEST((v1 >= v0));
+    BOOST_TEST((v0 <= v0));
+    BOOST_TEST((v1 >= v1));
 }
 
 BOOST_AUTO_TEST_CASE( arithmetic )
@@ -57,7 +75,7 @@ BOOST_AUTO_TEST_CASE( arithmetic )
 	BOOST_TEST( (v1 & v2) == (1 & 2) );
 	BOOST_TEST( (v1 | v2) == (1 | 2) );
 	BOOST_TEST( (v1 ^ v2) == (1 ^ 2) );
-	BOOST_TEST( ~v2 == ~2 );
+    BOOST_TEST( (~v2 == ~2) );
 
     oglu::StrongInteger<int> t(123);
     oglu::StrongInteger<int> t_pre = t++;

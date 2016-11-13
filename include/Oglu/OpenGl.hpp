@@ -15,5 +15,29 @@
 
 # include <GL/glew.h>
 # include <GLFW/glfw3.h>
+# include "Oglu/Generics/StrongInteger.hpp"
+
+namespace oglu
+{
+    /*! Available shader types. */
+    enum class ShaderType : GLenum
+    {
+        Fragment = GL_FRAGMENT_SHADER,
+        Vertex = GL_VERTEX_SHADER,
+        Geometry = GL_GEOMETRY_SHADER
+    };
+
+    /*! Program resource identifier. */
+    using ProgramId = StrongInteger<GLuint, struct ProgramTag>;
+
+    /*! Shader resource identifier. */
+    using ShaderId = StrongInteger<GLint, struct ShaderTag>;
+
+    /*! Uniform shader parameter identifier. */
+    using UniformId = StrongInteger<GLint, struct UniformTag>;
+
+    /*! Vertex attribute identifier. */
+    using AttributeId = StrongInteger<GLint, struct AttributeTag>;
+}
 
 #endif

@@ -28,10 +28,10 @@ namespace oglu
 		int		getAntialisingLevel()const;
 		bool	isDepthBufferEnabled()const;
 	private:
-		int		m_contextVersionMajor;
-		int		m_contextVersionMinor;
-		int		m_antialiasingLevel;
-		bool	m_depthBuffer;
+        int	const m_contextVersionMajor;
+        int const m_contextVersionMinor;
+        int const m_antialiasingLevel;
+        bool const m_depthBuffer;
 	};
 }
 

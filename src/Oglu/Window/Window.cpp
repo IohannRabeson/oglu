@@ -24,7 +24,7 @@ namespace oglu
 {
 	namespace
 	{
-		static inline Window*	getWindowFromGLFWwindow(GLFWwindow* window)
+        static inline Window* getWindowFromGLFWwindow(GLFWwindow* window)
 		{
 			return (static_cast<Window*>(glfwGetWindowUserPointer(window)));
 		}
@@ -47,7 +47,7 @@ namespace oglu
 		glfwTerminate();
 	}
 
-	bool	Window::create(int width, int height, std::string const& title,
+    bool Window::create(int width, int height, std::string const& title,
 						   bool fullscreen, ContextSettings&& settings)
 	{
 		bool			isOk = false;
@@ -77,8 +77,8 @@ namespace oglu
 			width = mode->width;
 			height = mode->height;
 		}
-		m_window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
-		glfwMakeContextCurrent(m_window);
+        m_window.reset(glfwCreateWindow(width, height, title.c_str(), monitor, nullptr));
+        glfwMakeContextCurrent(m_window.get());
 		glewExperimental = GL_TRUE; // Needed for core profile
 		if (m_window && glewInit() == GLEW_OK)
 		{
@@ -91,74 +91,70 @@ namespace oglu
 			}
 			// TODO: when an Application class will comes this line
 			// will should be removed.
-			glfwSetInputMode(m_window, GLFW_STICKY_KEYS, GL_TRUE);
-			glfwSetWindowUserPointer(m_window, this);
-			glfwSetWindowCloseCallback(m_window, &Window::windowClosedCallback);
-			glfwSetWindowFocusCallback(m_window, &Window::windowFocusCallback);
-			glfwSetWindowPosCallback(m_window, &Window::windowMovedCallback);
-			glfwSetWindowSizeCallback(m_window, &Window::windowResizedCallback);
-			glfwSetKeyCallback(m_window, &Window::keyboardCallback);
+            glfwSetInputMode(m_window.get(), GLFW_STICKY_KEYS, GL_TRUE);
+            glfwSetWindowUserPointer(m_window.get(), this);
+            glfwSetWindowCloseCallback(m_window.get(), &Window::windowClosedCallback);
+            glfwSetWindowFocusCallback(m_window.get(), &Window::windowFocusCallback);
+            glfwSetWindowPosCallback(m_window.get(), &Window::windowMovedCallback);
+            glfwSetWindowSizeCallback(m_window.get(), &Window::windowResizedCallback);
+            glfwSetKeyCallback(m_window.get(), &Window::keyboardCallback);
 			isOk = true;
 		}
 		return (isOk);
 	}
 
-	void	Window::close()
+    void Window::close()
 	{
-		if (m_window)
-		{
-			glfwDestroyWindow(m_window);
-			m_window = nullptr;
-		}
+        m_window.reset();
 	}
 
-	bool	Window::isOpen()const
+    bool Window::isOpen()const
 	{
-		return (m_window != nullptr && glfwWindowShouldClose(m_window) == 0);
+        return (m_window != nullptr && glfwWindowShouldClose(m_window.get()) == 0);
 	}
 
-	void	Window::clear()
+    void Window::clear()
 	{
 		glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
 		glClear(m_clearMode);
 	}
 
 
-	void	Window::setCursorMode(CursorMode mode)
+    void Window::setCursorMode(CursorMode mode)
 	{
-		glfwSetInputMode(m_window, GLFW_CURSOR, static_cast<int>(mode));
+        glfwSetInputMode(m_window.get(), GLFW_CURSOR, static_cast<int>(mode));
 	}
 
 	glm::dvec2	Window::getCursorPosition()const
 	{
 		glm::dvec2	pos;
 
-		glfwGetCursorPos(m_window, &pos.x, &pos.y);
+        glfwGetCursorPos(m_window.get(), &pos.x, &pos.y);
 		return (pos);
 	}
 
-	bool	Window::isKeyPressed(int key)const
+    bool Window::isKeyPressed(int key)const
 	{
-		return (glfwGetKey(m_window, key));
+        return (glfwGetKey(m_window.get(), key));
 	}
 
-	void	Window::setCursorPosition(glm::dvec2 const& pos)
+    void Window::setCursorPosition(glm::dvec2 const& pos)
 	{
-		glfwSetCursorPos(m_window, pos.x, pos.y);
+        glfwSetCursorPos(m_window.get(), pos.x, pos.y);
 	}
 
 
-	void	Window::display()
+    void Window::display()
 	{
-		glfwSwapBuffers(m_window);
+        glfwSwapBuffers(m_window.get());
 	}
 
-	void	Window::pollEvents()
+    void Window::pollEvents()
 	{
 		glfwPollEvents();
 	}
 
-	void	Window::registerWindowListener(IWindowListener* listener)
+    void Window::registerWindowListener(IWindowListener* listener)
 	{
 		if (std::find(m_windowListeners.begin(), m_windowListeners.end(), listener) == m_windowListeners.end())
 		{
@@ -166,7 +162,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::unregisterWindowListener(IWindowListener* listener)
+    void Window::unregisterWindowListener(IWindowListener* listener)
 	{
 		auto	it = std::find(m_windowListeners.begin(), m_windowListeners.end(), listener);
 
@@ -176,7 +172,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::registerKeyboardListener(IKeyboardListener* listener)
+    void Window::registerKeyboardListener(IKeyboardListener* listener)
 	{
 		if (std::find(m_keyboardListeners.begin(), m_keyboardListeners.end(), listener) == m_keyboardListeners.end())
 		{
@@ -184,7 +180,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::unregisterKeyboardListener(IKeyboardListener* listener)
+    void Window::unregisterKeyboardListener(IKeyboardListener* listener)
 	{
 		auto	it = std::find(m_keyboardListeners.begin(), m_keyboardListeners.end(), listener);
 
@@ -194,7 +190,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::registerMouseListener(IMouseListener* listener)
+    void Window::registerMouseListener(IMouseListener* listener)
 	{
 		if (std::find(m_mouseListeners.begin(), m_mouseListeners.end(), listener) == m_mouseListeners.end())
 		{
@@ -202,7 +198,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::unregisterMouseListener(IMouseListener* listener)
+    void Window::unregisterMouseListener(IMouseListener* listener)
 	{
 		auto	it = std::find(m_mouseListeners.begin(), m_mouseListeners.end(), listener);
 
@@ -212,7 +208,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyWindowClosed()
+    void Window::notifyWindowClosed()
 	{
 		for (auto* listener : m_windowListeners)
 		{
@@ -220,7 +216,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyWindowMoved(int x, int y)
+    void Window::notifyWindowMoved(int x, int y)
 	{
 		for (auto* listener : m_windowListeners)
 		{
@@ -228,7 +224,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyWindowResized(int width, int height)
+    void Window::notifyWindowResized(int width, int height)
 	{
 		for (auto* listener : m_windowListeners)
 		{
@@ -236,7 +232,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyWindowFocusGained()
+    void Window::notifyWindowFocusGained()
 	{
 		for (auto* listener : m_windowListeners)
 		{
@@ -244,7 +240,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyWindowFocusLost()
+    void Window::notifyWindowFocusLost()
 	{
 		for (auto* listener : m_windowListeners)
 		{
@@ -252,7 +248,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyKeyPressed(int key, KeyModifier modifiers)
+    void Window::notifyKeyPressed(int key, KeyModifier modifiers)
 	{
 		for (auto* listener : m_keyboardListeners)
 		{
@@ -260,7 +256,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyKeyReleased(int key, KeyModifier modifiers)
+    void Window::notifyKeyReleased(int key, KeyModifier modifiers)
 	{
 		for (auto* listener : m_keyboardListeners)
 		{
@@ -268,7 +264,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMouseMoved(double x, double y)
+    void Window::notifyMouseMoved(double x, double y)
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -276,7 +272,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMouseEntered()
+    void Window::notifyMouseEntered()
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -284,7 +280,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMouseLeaved()
+    void Window::notifyMouseLeaved()
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -292,7 +288,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMousePressed(MouseButton button, KeyModifier modifiers)
+    void Window::notifyMousePressed(MouseButton button, KeyModifier modifiers)
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -300,7 +296,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::notifyMouseReleased(MouseButton button, KeyModifier modifiers)
+    void Window::notifyMouseReleased(MouseButton button, KeyModifier modifiers)
 	{
 		for (auto* listener : m_mouseListeners)
 		{
@@ -308,28 +304,28 @@ namespace oglu
 		}
 	}
 
-	void	Window::windowClosedCallback(GLFWwindow* window)
+    void Window::windowClosedCallback(GLFWwindow* window)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
 		render->notifyWindowClosed();
 	}
 
-	void	Window::windowMovedCallback(GLFWwindow* window, int x, int y)
+    void Window::windowMovedCallback(GLFWwindow* window, int x, int y)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
 		render->notifyWindowMoved(x, y);
 	}
 
-	void	Window::windowResizedCallback(GLFWwindow* window, int width, int height)
+    void Window::windowResizedCallback(GLFWwindow* window, int width, int height)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
 		render->notifyWindowResized(width, height);
 	}
 
-	void	Window::windowFocusCallback(GLFWwindow* window, int state)
+    void Window::windowFocusCallback(GLFWwindow* window, int state)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
@@ -343,7 +339,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::keyboardCallback(GLFWwindow* window, int key, int, int action, int modifiers)
+    void Window::keyboardCallback(GLFWwindow* window, int key, int, int action, int modifiers)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
@@ -364,14 +360,14 @@ namespace oglu
 		}
 	}
 
-	void	Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
+    void Window::mouseMovedCallback(GLFWwindow* window, double x, double y)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
 		render->notifyMouseMoved(x, y);
 	}
 
-	void	Window::mouseFocusCallback(GLFWwindow* window, int entered)
+    void Window::mouseFocusCallback(GLFWwindow* window, int entered)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
@@ -385,7 +381,7 @@ namespace oglu
 		}
 	}
 
-	void	Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers)
+    void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int modifiers)
 	{
 		Window* const	render = getWindowFromGLFWwindow(window);
 
@@ -402,5 +398,10 @@ namespace oglu
 		default:
 			break;
 		}
-	}
+    }
+
+    void Window::WindowDeleter::operator()(GLFWwindow *window)
+    {
+        glfwDestroyWindow(window);
+    }
 }

@@ -22,55 +22,34 @@
 
 #include <glm/ext.hpp>
 
-static std::string	readEntireFile(std::string const& filePath)
-{
-	std::ifstream	file;
-	std::string		buffer;
-
-	file.open(filePath);
-	file.unsetf(std::ios_base::skipws);
-	if (file.is_open())
-	{
-		buffer.assign(std::istream_iterator<char>(file),
-					  std::istream_iterator<char>());
-	}
-	else
-	{
-		throw std::runtime_error("Unable to read file " + filePath);
-	}
-	return (buffer);
-}
-
 int main( void )
 {
-	oglu::Window						render;
+    oglu::Window render;
 
 	if (render.create(2880, 1800, "Test", true, oglu::ContextSettings(4, 1, 0)) == false)
 	{
 		std::cerr << "Create window failed" << std::endl;
 		return (1);
 	}
-	oglu::Shader<GL_VERTEX_SHADER>		vertShader;
-	oglu::Shader<GL_FRAGMENT_SHADER>	fragShader;
-	oglu::Program						program;
-	oglu::Camera						camera(60.f, 2880, 1800);
+    oglu::Shader<oglu::ShaderType::Vertex> vertShader;
+    oglu::Shader<oglu::ShaderType::Fragment> fragShader;
+    oglu::Program program;
+    oglu::Camera camera(60.f, 2880, 1800);
 
-	GLuint								vertexPositionId = 0; 
-	GLuint								vertexColorId = 0;
-	GLuint								VertexArrayID = 0;
-	GLuint								vertexBuffer = 0;
-	GLuint								colorBuffer = 0;
+    GLuint VertexArrayID = 0;
+    GLuint vertexBuffer = 0;
+    GLuint colorBuffer = 0;
 
 	try
 	{
-		vertShader.setSource(readEntireFile("shaders/simple_triangle.vert"));
-		fragShader.setSource(readEntireFile("shaders/simple_triangle.frag"));
+        vertShader.load(oglu::LoadShaderFromFile("shaders/simple_triangle.vert"));
+        fragShader.load(oglu::LoadShaderFromFile("shaders/simple_triangle.frag"));
 		vertShader.compile();
 		fragShader.compile();
 		program.link(std::move(vertShader), std::move(fragShader));
 
-		vertexPositionId = program.getAttributeLocation("vertexPosition");
-		vertexColorId = program.getAttributeLocation("vertexColor");
+        auto const vertexPositionId = program.getAttributeLocation("vertexPosition");
+        auto const vertexColorId = program.getAttributeLocation("vertexColor");
 		camera.setPosition(0.f, 0.f, 2.f);
 		static const GLfloat positionBufferData[] = { 
 			 0.0f, 1.0f, 0.0f,
@@ -96,10 +75,10 @@ int main( void )
 		glBufferData(GL_ARRAY_BUFFER, sizeof(colorBufferData), colorBufferData, GL_STATIC_DRAW);
 
 		// 1rst attribute buffer : position
-		glEnableVertexAttribArray(vertexPositionId);
+        glEnableVertexAttribArray(oglu::get(vertexPositionId));
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer(
-			vertexPositionId, 	// The attribute we want to configure
+            oglu::get(vertexPositionId), 	// The attribute we want to configure
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -108,10 +87,10 @@ int main( void )
 		);
 
 		// 2nd attribute buffer : colors
-		glEnableVertexAttribArray(vertexColorId);
+        glEnableVertexAttribArray(oglu::get(vertexColorId));
 		glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 		glVertexAttribPointer(
-			vertexColorId,      // attribute. No particular reason for 1, but must match the layout in the shader.
+            oglu::get(vertexColorId),      // attribute. No particular reason for 1, but must match the layout in the shader.
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -129,12 +108,12 @@ int main( void )
 			program.use();
             program.setUniform(uniformCamera, camera.getMatrix());
 			glBindVertexArray(VertexArrayID);
-			glEnableVertexAttribArray(vertexPositionId);
-			glEnableVertexAttribArray(vertexColorId);
+            glEnableVertexAttribArray(oglu::get(vertexPositionId));
+            glEnableVertexAttribArray(oglu::get(vertexColorId));
 			// Draw the triangle !
 			glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
-			glDisableVertexAttribArray(vertexPositionId);
-			glDisableVertexAttribArray(vertexColorId);
+            glDisableVertexAttribArray(oglu::get(vertexPositionId));
+            glDisableVertexAttribArray(oglu::get(vertexColorId));
 			glBindVertexArray(0);
 
 			render.display();

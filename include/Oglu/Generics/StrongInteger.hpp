@@ -32,10 +32,15 @@ namespace oglu
         {
         }
 
-        constexpr StrongInteger(T value) :
+        constexpr StrongInteger(T const& value) :
 			m_value(value)
 		{
 		}
+
+        constexpr StrongInteger(T const&& value) :
+            m_value(std::move(value))
+        {
+        }
 
         template <class U>
         constexpr explicit StrongInteger(U value) :
@@ -51,12 +56,26 @@ namespace oglu
 		}
 
         //////////////////////////////////////////////////////////////
-		operator T()
+        /*!
+         * \brief Allow to cast to T.
+         * \code
+         * auto a = oglu::StrongInteger<int>{234};
+         * int underlying0 = static_cast<int>(a);
+         * \endcode
+         */
+        explicit operator T() noexcept
 		{
 			return m_value;
 		}
 
-		operator T() const
+        /*!
+         * \brief Allow to cast to T.
+         * \code
+         * auto const a = oglu::StrongInteger<int>{234};
+         * int const underlying0 = static_cast<int>(a);
+         * \endcode
+         */
+        explicit operator T() const noexcept
 		{
 			return m_value;
 		}
@@ -71,6 +90,16 @@ namespace oglu
 		{
 			return left.m_value != right.m_value;
 		}
+
+        friend bool operator < (StrongInteger<T, Tag> left, StrongInteger<T, Tag> right)
+        {
+            return left.m_value < right.m_value;
+        }
+
+        friend bool operator > (StrongInteger<T, Tag> left, StrongInteger<T, Tag> right)
+        {
+            return left.m_value > right.m_value;
+        }
 
         friend bool operator <= (StrongInteger<T, Tag> left, StrongInteger<T, Tag> right)
 		{
@@ -311,27 +340,30 @@ namespace oglu
             return StrongInteger<T, Tag>{left.m_value ^ right};
         }
 
-        StrongInteger<T, Tag> operator ~ ()
+        friend StrongInteger<T, Tag> operator~ (StrongInteger<T, Tag> value)
 		{
-            return StrongInteger<T, Tag>{~m_value};
+            return StrongInteger<T, Tag>{~value.m_value};
 		}
 	private:
 		T m_value;
 	};
 
-    template <class T>
-    struct UnderlyingTypeImp;
+    template <class ST>
+    using UnderlyingType = typename ST::IntegerType;
 
-    template <class T>
-    struct UnderlyingTypeImp<StrongInteger<T>>
+    /*!
+     *  Return the underlying value of a StrongInteger.
+     *
+     * \code
+     * auto a = oglu::StrongInteger<int>{234};
+     * int underlying0 = oglu::get(a);
+     * \endcode
+     */
+    template <class ST>
+    static inline UnderlyingType<ST> get(ST const& value)
     {
-        using Type = T;
-    };
-
-    template <class T>
-    struct UnderlyingType : public UnderlyingTypeImp<T>
-    {
-    };
+        return static_cast<UnderlyingType<ST>>(value);
+    }
 }
 
 #endif

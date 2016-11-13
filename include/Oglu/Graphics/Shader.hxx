@@ -12,85 +12,89 @@
 
 #include "Oglu/OpenGlError.hpp"
 #include "Oglu/Graphics/ShaderCompilationException.hpp"
+#include "Oglu/Graphics/AShaderLoader.hpp"
 
 namespace oglu
 {
 	namespace
 	{
-		template <GLenum Type>
+        template <ShaderType Type>
 		struct	ShaderTypeTraits;
 
 		template <>
-		struct	ShaderTypeTraits<GL_VERTEX_SHADER>
+        struct	ShaderTypeTraits<ShaderType::Vertex>
 		{
 			static constexpr char const* const	TypeName = "Vertex shader";
 		};
 
 		template <>
-		struct	ShaderTypeTraits<GL_FRAGMENT_SHADER>
+        struct	ShaderTypeTraits<ShaderType::Fragment>
 		{
 			static constexpr char const* const	TypeName = "Fragment shader";
 		};
 
 		template <>
-		struct	ShaderTypeTraits<GL_GEOMETRY_SHADER>
+        struct	ShaderTypeTraits<ShaderType::Geometry>
 		{
 			static constexpr char const* const	TypeName = "Geometry shader";
 		};
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	Shader<Type>::Shader() :
 		m_shaderId(0u)
 	{
-		GL_CHECK( m_shaderId = glCreateShader(Type) );
+        GL_CHECK( m_shaderId = glCreateShader(static_cast<GLenum>(Type)) );
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	Shader<Type>::~Shader()
 	{
-		GL_CHECK( glDeleteShader(m_shaderId) );
+        GL_CHECK( glDeleteShader(oglu::get(m_shaderId)) );
 	}
 
-	template <GLenum Type>
-	void	Shader<Type>::setSource(std::string const& source)
-	{
-		GLchar const*	str = source.c_str();
+    template <ShaderType Type>
+    void Shader<Type>::load(AShaderLoader&& loader)
+    {
+        std::string const content = loader.getShaderContent();
+        GLchar const* const str = content.c_str();
 
-		GL_CHECK( glShaderSource(m_shaderId, 1, &str, 0) );
-	}
+        m_compiled = false;
+        GL_CHECK( glShaderSource(oglu::get(m_shaderId), 1, &str, 0) );
+    }
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	void	Shader<Type>::compile()
 	{
 		GLint	result = GL_FALSE;
 
-		GL_CHECK( glCompileShader(m_shaderId) );
-		GL_CHECK( glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &result) );
-		if (result == false)
+        GL_CHECK( glCompileShader(oglu::get(m_shaderId)) );
+        GL_CHECK( glGetShaderiv(oglu::get(m_shaderId), GL_COMPILE_STATUS, &result) );
+        if (result == GL_FALSE)
 		{
 			throw ShaderCompilationException(ShaderTypeTraits<Type>::TypeName, getInfoLog());
 		}
+        m_compiled = true;
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
     ShaderId Shader<Type>::getId()const
 	{
 		return (m_shaderId);
 	}
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	std::string	Shader<Type>::getInfoLog()const
 	{
 		GLsizei		length = 0u;
 		std::string	result;
 
-		glGetShaderiv(m_shaderId, GL_INFO_LOG_LENGTH, &length);
+        glGetShaderiv(oglu::get(m_shaderId), GL_INFO_LOG_LENGTH, &length);
 		if (length > 0)
 		{
 			char	buffer[length + 1];
 
-			glGetShaderInfoLog(m_shaderId, length, nullptr, buffer);
+            glGetShaderInfoLog(oglu::get(m_shaderId), length, nullptr, buffer);
 			result.assign(buffer);
 			if (result.back() == '\n')
 			{

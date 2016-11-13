@@ -18,22 +18,28 @@
 
 namespace oglu
 {
-    using ShaderId = StrongInteger<GLint, struct ShaderTag>;
+    class AShaderLoader;
 
-	template <GLenum Type>
+    template <ShaderType Type>
 	class Shader
 	{
 	public:
 		explicit Shader();
 		~Shader();
 
-        void setSource(std::string const& source);
+        void load(AShaderLoader&& loader);
+
+        /*!
+         * \brief Compile the shader
+         * \exception ShaderCompilationException If compilation fails
+         */
         void compile();
 
         ShaderId getId()const;
 		std::string	getInfoLog()const;
 	private:
         ShaderId m_shaderId;
+        bool m_compiled = false;
 	};
 }
 

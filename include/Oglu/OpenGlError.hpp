@@ -22,7 +22,7 @@
 # 	define GL_CHECK( expression ) expression;
 # endif
 
-static inline void	checkGlError(char const* file, std::size_t line)
+static inline void checkGlError(char const* file, std::size_t line)
 {
 	auto	errorId = glGetError();
 

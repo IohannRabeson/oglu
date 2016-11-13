@@ -22,36 +22,17 @@
 
 #include <glm/ext.hpp>
 
-static std::string	readEntireFile(std::string const& filePath)
-{
-	std::ifstream	file;
-	std::string		buffer;
-
-	file.open(filePath);
-	file.unsetf(std::ios_base::skipws);
-	if (file.is_open())
-	{
-		buffer.assign(std::istream_iterator<char>(file),
-					  std::istream_iterator<char>());
-	}
-	else
-	{
-		throw std::runtime_error("Unable to read file " + filePath);
-	}
-	return (buffer);
-}
-
 int main( void )
 {
-	oglu::Window						render;
+    oglu::Window render;
 
 	if (render.create(2880, 1800, "Test", false, oglu::ContextSettings(4, 1, 0)) == false)
 	{
 		std::cerr << "Create window failed" << std::endl;
 		return (1);
 	}
-	oglu::Shader<GL_VERTEX_SHADER>		vertShader;
-	oglu::Shader<GL_FRAGMENT_SHADER>	fragShader;
+    oglu::Shader<oglu::ShaderType::Vertex> vertShader;
+    oglu::Shader<oglu::ShaderType::Fragment> fragShader;
 	oglu::Program						program;
 	oglu::Camera						camera(45.f, 2880, 1800);
 
@@ -67,8 +48,8 @@ int main( void )
 	float								moveSpeed = 2.f;
 	try
 	{
-		vertShader.setSource(readEntireFile("shaders/camera.vert"));
-		fragShader.setSource(readEntireFile("shaders/camera.frag"));
+        vertShader.load(oglu::LoadShaderFromFile("shaders/camera.vert"));
+        fragShader.load(oglu::LoadShaderFromFile("shaders/camera.frag"));
 		vertShader.compile();
 		fragShader.compile();
 		program.link(std::move(vertShader), std::move(fragShader));
@@ -169,10 +150,10 @@ int main( void )
 		glBufferData(GL_ARRAY_BUFFER, sizeof(colorBufferData), colorBufferData, GL_STATIC_DRAW);
 
 		// 1rst attribute buffer : position
-		glEnableVertexAttribArray(vertexPositionId);
+        glEnableVertexAttribArray(oglu::get(vertexPositionId));
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glVertexAttribPointer(
-			vertexPositionId, 	// The attribute we want to configure
+            oglu::get(vertexPositionId), 	// The attribute we want to configure
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -181,10 +162,10 @@ int main( void )
 		);
 
 		// 2nd attribute buffer : colors
-		glEnableVertexAttribArray(vertexColorId);
+        glEnableVertexAttribArray(oglu::get(vertexColorId));
 		glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 		glVertexAttribPointer(
-			vertexColorId,      // attribute. No particular reason for 1, but must match the layout in the shader.
+            oglu::get(vertexColorId),      // attribute. No particular reason for 1, but must match the layout in the shader.
 			3,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
@@ -202,12 +183,12 @@ int main( void )
 			program.use();
             program.setUniform(uniformCamera, camera.getMatrix());
 			glBindVertexArray(VertexArrayID);
-			glEnableVertexAttribArray(vertexPositionId);
-			glEnableVertexAttribArray(vertexColorId);
+            glEnableVertexAttribArray(oglu::get(vertexPositionId));
+            glEnableVertexAttribArray(oglu::get(vertexColorId));
 			// Draw the triangle !
 			glDrawArrays(GL_TRIANGLES, 0, 36); // 3 indices starting at 0 -> 1 triangle
-			glDisableVertexAttribArray(vertexPositionId);
-			glDisableVertexAttribArray(vertexColorId);
+            glDisableVertexAttribArray(oglu::get(vertexPositionId));
+            glDisableVertexAttribArray(oglu::get(vertexColorId));
 			glBindVertexArray(0);
 			render.display();
 			// Mouse control
