@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oglu/ContextSettings.hpp"
+#include "Oglu/Window/ContextSettings.hpp"
 
 namespace oglu
 {

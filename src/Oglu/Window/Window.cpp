@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oglu/Window.hpp"
-#include "Oglu/IWindowListener.hpp"
-#include "Oglu/IKeyboardListener.hpp"
-#include "Oglu/IMouseListener.hpp"
+#include "Oglu/Window/Window.hpp"
+#include "Oglu/Window/IWindowListener.hpp"
+#include "Oglu/Window/IKeyboardListener.hpp"
+#include "Oglu/Window/IMouseListener.hpp"
 #include "Oglu/OpenGlError.hpp"
-#include "Oglu/Shader.hpp"
+#include "Oglu/Graphics/Shader.hpp"
 
 #include <algorithm>
 #include <iostream>

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oglu/Camera.hpp"
+#include "Oglu/Graphics/Camera.hpp"
 #include <glm/ext.hpp>
 #include <cmath>
 

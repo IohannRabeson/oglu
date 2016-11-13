@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include <Oglu/OpenGl.hpp>
-#include <Oglu/Window.hpp>
-#include <Oglu/Shader.hpp>
-#include <Oglu/Program.hpp>
-#include <Oglu/Camera.hpp>
+#include <Oglu/Window/Window.hpp>
+#include <Oglu/Graphics/Shader.hpp>
+#include <Oglu/Graphics/Program.hpp>
+#include <Oglu/Graphics/Camera.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -55,16 +55,14 @@ int main( void )
 	oglu::Program						program;
 	oglu::Camera						camera(45.f, 2880, 1800);
 
-	GLuint								vertexPositionId = 0; 
-	GLuint								vertexColorId = 0;
 	GLuint								VertexArrayID = 0;
 	GLuint								vertexBuffer = 0;
 	GLuint								colorBuffer = 0;
 
-	double 								lastTime = 0.f;
-	double								currentTime = 0.f;
-	double								frameTime = 0.f;
-	double								mouseSens = 0.1;
+    float 								lastTime = 0.f;
+    float								currentTime = 0.f;
+    float								frameTime = 0.f;
+    float								mouseSens = 0.1;
 	glm::dvec2							mousePos;
 	float								moveSpeed = 2.f;
 	try
@@ -75,9 +73,12 @@ int main( void )
 		fragShader.compile();
 		program.link(std::move(vertShader), std::move(fragShader));
 
-		vertexPositionId = program.getAttributeLocation("vertexPosition");
-		vertexColorId = program.getAttributeLocation("vertexColor");
+        auto const vertexPositionId = program.getAttributeLocation("vertexPosition");
+        auto const vertexColorId = program.getAttributeLocation("vertexColor");
+        auto const uniformCamera = program.getUniformLocation("camera");
+
 		camera.setPosition(0.f, 0.f, 5.f);
+
 		static const GLfloat positionBufferData[] = { 
 			1.0f,-1.0f,-1.0f,
     		-1.0f,-1.0f, 1.0f,
@@ -199,7 +200,7 @@ int main( void )
 			render.pollEvents();
 			render.clear();
 			program.use();
-			program.setUniform("camera", camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getMatrix());
 			glBindVertexArray(VertexArrayID);
 			glEnableVertexAttribArray(vertexPositionId);
 			glEnableVertexAttribArray(vertexColorId);

@@ -50,7 +50,7 @@ namespace oglu
 		float				m_aspectRatio;	
 		float				m_near;
 		float				m_far;
-		float				m_yaw;		//<	Horizontal angle in degrees(yaw)
+        float				m_yaw;              //<	Horizontal angle in degrees(yaw)
 		float				m_pitch;			//<	Vertical angle in degrees(pitch)
 		mutable bool		m_viewDirty;
 		mutable bool		m_projectionDirty;

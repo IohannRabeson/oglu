@@ -9,7 +9,7 @@ set(TESTED_INC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 set(TESTED_SRC ${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
 set(SRC
-	${SRC_DIR}/main.cpp
+    ${SRC_DIR}/main.cpp
 )
 
 # Put here hpp and cpp tested
@@ -18,6 +18,7 @@ set(SRC_TESTED
 
 # Put here your hpp and cpp of tests
 set(SRC_TEST
+    ${SRC_DIR}/StrongIntegerTest.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/tests)

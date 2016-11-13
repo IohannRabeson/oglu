@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "Oglu/OpenGlError.hpp"
-#include "Oglu/ShaderCompilationException.hpp"
+#include "Oglu/Graphics/ShaderCompilationException.hpp"
 
 namespace oglu
 {
@@ -74,7 +74,7 @@ namespace oglu
 	}
 
 	template <GLenum Type>
-	GLuint	Shader<Type>::getId()const
+    ShaderId Shader<Type>::getId()const
 	{
 		return (m_shaderId);
 	}

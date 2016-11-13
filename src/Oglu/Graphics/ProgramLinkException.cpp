@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IKeyboardListener.hpp                              :+:      :+:    :+:   */
+/*   ProgramLinkException.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/08/29 04:01:44 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 20:38:36 by irabeson         ###   ########.fr       */
+/*   Created: 2015/09/12 10:39:58 by irabeson          #+#    #+#             */
+/*   Updated: 2015/09/12 10:42:27 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OGLU_IKEYBOARDLISTENER_HPP
-# define OGLU_IKEYBOARDLISTENER_HPP
-# include "Oglu/KeyModifier.hpp"
+#include "Oglu/Graphics/ProgramLinkException.hpp"
+#include <string>
 
 namespace oglu
 {
-	class IKeyboardListener
+	ProgramLinkException::ProgramLinkException(std::string const& log) :
+		std::runtime_error("Program link error: \n" + log)
 	{
-	public:
-		virtual ~IKeyboardListener()
-		{
-		}
-
-		virtual void	onKeyPressed(int key, KeyModifier modifiers) = 0;
-		virtual void	onKeyReleased(int key, KeyModifier modifiers) = 0;
-	};
+	}
 }
-
-#endif

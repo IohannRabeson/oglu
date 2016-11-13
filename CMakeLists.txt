@@ -35,30 +35,37 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mod
 set(EXECUTABLE_OUTPUT_PATH output)
 set(APPLICATION_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/output)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/Oglu)
-set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Oglu)
 
 # Sources
 set(SRC
-	${INC_DIR}/OpenGL.hpp
-	${INC_DIR}/OpenGlError.hpp
-	${INC_DIR}/Shader.hpp
-	${INC_DIR}/Shader.hxx
-	${INC_DIR}/ShaderCompilationException.hpp
-	${INC_DIR}/Program.hpp
-	${INC_DIR}/Program.hxx
-	${INC_DIR}/ProgramLinkException.hpp
-	${INC_DIR}/ContextSettings.hpp
-	${INC_DIR}/Window.hpp
-	${INC_DIR}/IKeyboardListener.hpp
-	${INC_DIR}/IWindowListener.hpp
-	${INC_DIR}/Camera.hpp
+    ${INC_DIR}/OpenGL.hpp
+    ${INC_DIR}/OpenGlError.hpp
 
-	${SRC_DIR}/Program.cpp
-	${SRC_DIR}/Window.cpp
-	${SRC_DIR}/ContextSettings.cpp
-	${SRC_DIR}/ShaderCompilationException.cpp
-	${SRC_DIR}/ProgramLinkException.cpp
-	${SRC_DIR}/Camera.cpp
+    ${INC_DIR}/Generics/StrongInteger.hpp
+
+    ${INC_DIR}/Graphics/Shader.hpp
+    ${INC_DIR}/Graphics/Shader.hxx
+    ${INC_DIR}/Graphics/ShaderCompilationException.hpp
+    ${INC_DIR}/Graphics/Program.hpp
+    ${INC_DIR}/Graphics/Program.hxx
+    ${INC_DIR}/Graphics/ProgramLinkException.hpp
+    ${INC_DIR}/Graphics/Camera.hpp
+
+    ${INC_DIR}/Window/ContextSettings.hpp
+    ${INC_DIR}/Window/Window.hpp
+    ${INC_DIR}/Window/IKeyboardListener.hpp
+    ${INC_DIR}/Window/IWindowListener.hpp
+
+    ${SRC_DIR}/Graphics/Program.cpp
+    ${SRC_DIR}/Graphics/ShaderCompilationException.cpp
+    ${SRC_DIR}/Graphics/ProgramLinkException.cpp
+    ${SRC_DIR}/Graphics/Camera.cpp
+
+    ${SRC_DIR}/Window/Window.cpp
+    ${SRC_DIR}/Window/IKeyboardListener.cpp
+    ${SRC_DIR}/Window/IWindowListener.cpp
+    ${SRC_DIR}/Window/ContextSettings.cpp
 )
 
 # Includes
@@ -98,10 +105,10 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_template_template_parameters)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_variadic_templates)
 
 target_link_libraries(${APPLICATION_NAME}
-					  ${OPENGL_gl_LIBRARIES}
-					  ${GLFW_LIBRARIES}
-					  ${GLEW_LIBRARIES}
-					  glfw)
+                      ${OPENGL_gl_LIBRARIES}
+                      ${GLFW_LIBRARIES}
+                      ${GLEW_LIBRARIES}
+                      glfw)
 
 if (BUILD_ALL OR BUILD_DOCUMENTATION)
 	add_subdirectory(doc)

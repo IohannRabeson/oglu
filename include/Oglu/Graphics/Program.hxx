@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oglu/ProgramLinkException.hpp"
+#include "Oglu/Graphics/ProgramLinkException.hpp"
 
 namespace oglu
 {
@@ -54,4 +54,10 @@ namespace oglu
 	{
 		glDetachShader(m_programId, shader.getId());
 	}
+
+    template <class T, std::size_t N>
+    void    Program::setUniform(UniformId id, std::array<T, N> const& array)
+    {
+        setUniform(id, array.data(), N);
+    }
 }

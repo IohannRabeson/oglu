@@ -12,9 +12,9 @@
 
 #ifndef IMOUSELISTENER_HPP
 # define IMOUSELISTENER_HPP
-# include "OpenGl.hpp"
-# include "KeyModifier.hpp"
-# include "MouseButton.hpp"
+# include "Oglu/OpenGl.hpp"
+# include "Oglu/Window/KeyModifier.hpp"
+# include "Oglu/Window/MouseButton.hpp"
 
 namespace oglu
 {

@@ -12,9 +12,14 @@
 
 #ifndef OGLU_SHADER_HPP
 # define OGLU_SHADER_HPP
+# include "Oglu/OpenGl.hpp"
+# include "Oglu/Generics/StrongInteger.hpp"
+# include <string>
 
 namespace oglu
 {
+    using ShaderId = StrongInteger<GLint, struct ShaderTag>;
+
 	template <GLenum Type>
 	class Shader
 	{
@@ -22,15 +27,15 @@ namespace oglu
 		explicit Shader();
 		~Shader();
 
-		void		setSource(std::string const& source);
-		void		compile();
+        void setSource(std::string const& source);
+        void compile();
 
-		GLuint		getId()const;
+        ShaderId getId()const;
 		std::string	getInfoLog()const;
 	private:
-		GLuint	m_shaderId;
+        ShaderId m_shaderId;
 	};
 }
 
-#include "Oglu/Shader.hxx"
+#include "Oglu/Graphics/Shader.hxx"
 #endif

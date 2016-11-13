@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include <Oglu/OpenGl.hpp>
-#include <Oglu/Window.hpp>
-#include <Oglu/Shader.hpp>
-#include <Oglu/Program.hpp>
-#include <Oglu/Camera.hpp>
+#include <Oglu/Window/Window.hpp>
+#include <Oglu/Graphics/Shader.hpp>
+#include <Oglu/Graphics/Program.hpp>
+#include <Oglu/Graphics/Camera.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -120,11 +120,14 @@ int main( void )
 		);
 
 		glBindVertexArray(0);
+
+        auto const uniformCamera = program.getUniformLocation("camera");
+
 		while (render.isOpen())
 		{
 			render.clear();
 			program.use();
-			program.setUniform("camera", camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getMatrix());
 			glBindVertexArray(VertexArrayID);
 			glEnableVertexAttribArray(vertexPositionId);
 			glEnableVertexAttribArray(vertexColorId);
