@@ -59,6 +59,7 @@ set(SRC
     ${INC_DIR}/Graphics/Camera.hpp
     ${INC_DIR}/Graphics/Mesh.hpp
     ${INC_DIR}/Graphics/Mesh.hxx
+    ${INC_DIR}/Graphics/Transform.hpp
 
     ${INC_DIR}/Window/ContextSettings.hpp
     ${INC_DIR}/Window/Window.hpp
@@ -71,6 +72,7 @@ set(SRC
     ${SRC_DIR}/Graphics/ShaderCompilationException.cpp
     ${SRC_DIR}/Graphics/ProgramLinkException.cpp
     ${SRC_DIR}/Graphics/Camera.cpp
+    ${SRC_DIR}/Graphics/Transform.cpp
 
     ${SRC_DIR}/Window/Window.cpp
     ${SRC_DIR}/Window/IKeyboardListener.cpp

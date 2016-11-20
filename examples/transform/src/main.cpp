@@ -17,6 +17,7 @@
 #include <Oglu/Graphics/Camera.hpp>
 #include <Oglu/Graphics/Mesh.hpp>
 #include <Oglu/Graphics/RgbaColor.hpp>
+#include <Oglu/Graphics/Transform.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -131,16 +132,16 @@ int main( void )
 
     oglu::Program program;
     oglu::Camera camera(45.f, 2880, 1800);
-    Mesh mesh;
+    std::vector<Mesh> meshes(8u);
+    std::vector<oglu::Transform> transforms(8u, oglu::Transform::Identity);
 
-    Mesh mesh2;
+    float lastTime = 0.f;
+    float currentTime = 0.f;
+    float frameTime = 0.f;
+    float mouseSens = 0.1;
+    glm::dvec2 mousePos;
+    float moveSpeed = 2.f;
 
-    float 								lastTime = 0.f;
-    float								currentTime = 0.f;
-    float								frameTime = 0.f;
-    float								mouseSens = 0.1;
-    glm::dvec2							mousePos;
-    float								moveSpeed = 2.f;
     try
     {
         program.link(oglu::Shader<oglu::ShaderType::Vertex>(oglu::LoadShaderFromFile("shaders/mesh.vert")),
@@ -150,29 +151,32 @@ int main( void )
 
         camera.setPosition(0.f, 0.f, 5.f);
 
-        mesh.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
-        mesh.load(CubeLoader());
-
-        mesh2.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh2.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
-        mesh2.load(CubeLoader());
-
+        for (auto& mesh : meshes)
+        {
+            mesh.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
+            mesh.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
+            mesh.load(CubeLoader());
+        }
+        for (auto i = 0u; i < transforms.size(); ++i)
+        {
+            transforms[i].setPosition(glm::vec3(i * 1.61803398875f * 3.f, 0.f, 0.f));
+        }
         render.setCursorPosition(glm::dvec2(0, 0));
         render.setCursorMode(oglu::Window::CursorMode::Disabled);
 
-        glm::mat4 model = glm::mat4(1.f);
-
-        model = glm::translate(model, glm::vec3(-2.f));
         while (render.isOpen())
         {
             render.pollEvents();
             render.clear();
             program.use();
-            program.setUniform(uniformCamera, camera.getMatrix() * model);
-            mesh.render();
-            program.setUniform(uniformCamera, camera.getMatrix());
-            mesh2.render();
+
+            auto transformIt = transforms.begin();
+            for (auto const& mesh : meshes)
+            {
+                program.setUniform(uniformCamera, camera.getMatrix() * transformIt->getMatrix());
+                mesh.render();
+                ++transformIt;
+            }
             program.unuse();
             render.display();
             // Mouse control
@@ -205,7 +209,6 @@ int main( void )
             {
                 camera.move(frameTime * -moveSpeed * camera.getUp());
             }
-            model = glm::rotate(model, frameTime, glm::vec3(0.f, 1.f, 0.f));
             frameTime = currentTime - lastTime;
             lastTime = currentTime;
             currentTime = glfwGetTime();

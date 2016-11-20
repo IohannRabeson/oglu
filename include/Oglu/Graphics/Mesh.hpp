@@ -150,7 +150,7 @@ namespace oglu
         template <typename Loader>
         void load(Loader&& loader);
 
-        void render();
+        void render()const;
     private:
         template <typename Loader>
         void loadImp(Loader&& loader);

@@ -47,7 +47,7 @@ namespace oglu
     }
 
     template <typename ... Components>
-    void Mesh<Components...>::render()
+    void Mesh<Components...>::render()const
     {
         glBindVertexArray(m_vertexArray);
 
@@ -55,7 +55,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto const& storage = getStorage<ComponentType>();
 
             storage.enableVertexAttribute();
         });
@@ -66,7 +66,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto const& storage = getStorage<ComponentType>();
 
             storage.disableVertexAttribute();
         });
@@ -137,7 +137,7 @@ namespace oglu
             GL_CHECK( glDeleteBuffers(1, &m_buffer) );
         }
 
-        std::size_t size()const
+        std::size_t size() const noexcept
         {
             return m_components.size();
         }
@@ -157,7 +157,7 @@ namespace oglu
             return m_components.size();
         }
 
-        void prepareRender()
+        void prepareRender()const
         {
             using ComponentDataType = typename Component::DataType;
             using ComponentBaseType = typename Component::BaseType;
@@ -173,12 +173,12 @@ namespace oglu
             disableVertexAttribute();
         }
 
-        void enableVertexAttribute()
+        void enableVertexAttribute()const
         {
             GL_CHECK( glEnableVertexAttribArray(oglu::get(m_attribute)) );
         }
 
-        void disableVertexAttribute()
+        void disableVertexAttribute()const
         {
             GL_CHECK( glDisableVertexAttribArray(oglu::get(m_attribute)) );
         }

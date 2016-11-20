@@ -115,7 +115,7 @@ namespace oglu
         void setUniform(UniformId id, glm::mat3 const& mat);
         void setUniform(UniformId id, glm::mat4 const& mat);
 
-        /*! Overload dedicated to unform array. */
+        /*! Overload dedicated to the arrays of uniforms. */
         template <class T, std::size_t N>
         void setUniform(UniformId id, std::array<T, N> const& array);
 
