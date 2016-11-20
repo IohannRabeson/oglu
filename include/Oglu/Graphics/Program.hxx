@@ -28,6 +28,7 @@ namespace oglu
 			throw ProgramLinkException(getInfoLog());
 		}
         gatherUniformInfos();
+        gatherAttributeInfos();
 	}
 
     template <ShaderType Type, ShaderType ... Types>

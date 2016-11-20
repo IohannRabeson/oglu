@@ -30,9 +30,10 @@ std::string UniformTestLoader::getShaderContent()
         "#version 330 core\n"
         "uniform mat4 camera;\n"
         "uniform float truc;\n"
+        "uniform int yop;\n"
         "void main()\n"
         "{\n"
-        "gl_Position = camera * vec4(truc);\n"
+        "gl_Position = camera * vec4(truc * yop);\n"
         "}"
     };
 }
@@ -47,21 +48,19 @@ BOOST_AUTO_TEST_CASE( uniform_info )
         return;
     }
 
-    oglu::Shader<oglu::ShaderType::Vertex> shader;
     oglu::Program program;
     std::vector<oglu::Program::UniformInfo> infos;
 
-    shader.load(UniformTestLoader());
-    shader.compile();
-    program.link(shader);
+    program.link(oglu::Shader<oglu::ShaderType::Vertex>(UniformTestLoader()));
     program.forEachUniformInfo([&infos](oglu::Program::UniformInfo const& info)
     {
         infos.push_back(info);
     });
-    // expected size: 2 ->
+    // expected size: 3 ->
     // "uniform mat4 camera;\n"
     // "uniform float truc;\n"
-    BOOST_TEST(infos.size() == 2u);
+    // "uniform int yop;\n"
+    BOOST_TEST(infos.size() == 3u);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KeyModifier.hpp                                    :+:      :+:    :+:   */
+/*   LazyCast.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/09/10 20:20:14 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 20:54:33 by irabeson         ###   ########.fr       */
+/*   Created: 2016/11/16 23:37:54 by irabeson          #+#    #+#             */
+/*   Updated: 2016/11/16 23:38:47 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYMODIFIER_HPP
-# define KEYMODIFIER_HPP
-# include "Oglu/OpenGl/OpenGl.hpp"
+#if!defined LAZYCAST_HPP
+# define LAZYCAST_HPP
+# include <type_traits>
 
 namespace oglu
 {
-    enum class KeyModifier : int
+    template <class T>
+    static inline typename std::underlying_type<T>::type lazyCast(T enumValue) noexcept
     {
-        Shift = GLFW_MOD_SHIFT,
-        Control = GLFW_MOD_CONTROL,
-        Alt = GLFW_MOD_ALT,
-        Super = GLFW_MOD_SUPER
-    };
+        return static_cast<typename std::underlying_type<T>::type>(enumValue);
+    }
 }
 
 #endif

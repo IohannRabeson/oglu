@@ -12,7 +12,7 @@
 
 #ifndef OGLU_WINDOW_HPP
 # define OGLU_WINDOW_HPP
-# include "Oglu/OpenGl.hpp"
+# include "Oglu/OpenGl/OpenGl.hpp"
 # include "Oglu/Window/ContextSettings.hpp"
 # include "Oglu/Window/KeyModifier.hpp"
 # include "Oglu/Window/MouseButton.hpp"

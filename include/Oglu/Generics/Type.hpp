@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KeyModifier.hpp                                    :+:      :+:    :+:   */
+/*   Type.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/09/10 20:20:14 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 20:54:33 by irabeson         ###   ########.fr       */
+/*   Created: 2016/05/29 03:12:28 by irabeson          #+#    #+#             */
+/*   Updated: 2016/05/29 03:13:03 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYMODIFIER_HPP
-# define KEYMODIFIER_HPP
-# include "Oglu/OpenGl/OpenGl.hpp"
+#if!defined TYPE_HPP
+# define TYPE_HPP
 
 namespace oglu
 {
-    enum class KeyModifier : int
-    {
-        Shift = GLFW_MOD_SHIFT,
-        Control = GLFW_MOD_CONTROL,
-        Alt = GLFW_MOD_ALT,
-        Super = GLFW_MOD_SUPER
-    };
+	template <class T>
+	struct Type
+	{
+        using TType = T;
+	};
 }
 
 #endif

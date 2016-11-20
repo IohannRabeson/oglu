@@ -27,6 +27,15 @@ namespace oglu
         Geometry = GL_GEOMETRY_SHADER
     };
 
+    enum class BufferBindingTarget : GLenum
+    {
+        /*! Vertex attributes buffer. */
+        VertexBuffer = GL_ARRAY_BUFFER,
+
+        /*! Vertex indices buffer. */
+        IndexBuffer = GL_ELEMENT_ARRAY_BUFFER
+    };
+
     /*! Program resource identifier. */
     using ProgramId = StrongInteger<GLuint, struct ProgramTag>;
 
@@ -38,6 +47,12 @@ namespace oglu
 
     /*! Vertex attribute identifier. */
     using AttributeId = StrongInteger<GLint, struct AttributeTag>;
+
+    /*! Vertex array buffer identifier. */
+    using VertexArrayBufferId = StrongInteger<GLuint, struct VertexArrayBufferTag>;
+
+    /*! Vertex object buffer identifier. */
+    using VertexArrayObjectId = StrongInteger<GLuint, struct VertexArrayObjectTag>;
 }
 
 #endif

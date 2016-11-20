@@ -12,6 +12,7 @@
 
 #if!defined ASHADERLOADER_HPP
 # define ASHADERLOADER_HPP
+# include "Oglu/OpenGl/OpenGl.hpp"
 # include <string>
 
 namespace oglu

@@ -12,8 +12,7 @@
 
 #ifndef OGLU_SHADER_HPP
 # define OGLU_SHADER_HPP
-# include "Oglu/OpenGl.hpp"
-# include "Oglu/Generics/StrongInteger.hpp"
+# include "Oglu/OpenGl/OpenGl.hpp"
 # include <string>
 
 namespace oglu
@@ -21,26 +20,27 @@ namespace oglu
     class AShaderLoader;
 
     template <ShaderType Type>
-	class Shader
-	{
-	public:
-		explicit Shader();
-		~Shader();
-
-        void load(AShaderLoader&& loader);
+    class Shader
+    {
+    public:
+        explicit Shader();
+        explicit Shader(AShaderLoader&& loader);
+        ~Shader();
 
         /*!
-         * \brief Compile the shader
+         * \brief Load then compile the shader
          * \exception ShaderCompilationException If compilation fails
          */
-        void compile();
+        void load(AShaderLoader&& loader);
 
         ShaderId getId()const;
-		std::string	getInfoLog()const;
-	private:
-        ShaderId m_shaderId;
+        std::string	getInfoLog()const;
+    private:
+        void compile();
+    private:
+        ShaderId const m_shaderId;
         bool m_compiled = false;
-	};
+    };
 }
 
 #include "Oglu/Graphics/Shader.hxx"

@@ -1,28 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   KeyModifier.hpp                                    :+:      :+:    :+:   */
+/*   Color.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/09/10 20:20:14 by irabeson          #+#    #+#             */
-/*   Updated: 2015/09/10 20:54:33 by irabeson         ###   ########.fr       */
+/*   Created: 2016/11/19 19:25:34 by irabeson          #+#    #+#             */
+/*   Updated: 2016/11/19 19:25:43 by irabeson         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYMODIFIER_HPP
-# define KEYMODIFIER_HPP
-# include "Oglu/OpenGl/OpenGl.hpp"
-
-namespace oglu
-{
-    enum class KeyModifier : int
-    {
-        Shift = GLFW_MOD_SHIFT,
-        Control = GLFW_MOD_CONTROL,
-        Alt = GLFW_MOD_ALT,
-        Super = GLFW_MOD_SUPER
-    };
-}
-
-#endif

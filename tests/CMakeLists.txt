@@ -20,6 +20,8 @@ set(SRC_TESTED
 set(SRC_TEST
     ${SRC_DIR}/StrongIntegerTest.cpp
     ${SRC_DIR}/ProgramTest.cpp
+    ${SRC_DIR}/TypeListTest.cpp
+    ${SRC_DIR}/MeshModelTest.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/tests)
@@ -31,17 +33,17 @@ foreach(SRC_FILE ${SRC_TEST})
         get_filename_component(TEST_NAME ${SRC_FILE} NAME_WE)
 
         add_executable(${TEST_NAME} ${SRC_FILE} ${SRC_TESTED} ${SRC})
-		set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 11)
-		set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+                set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 11)
+                set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
         #link to Boost libraries and other targets and dependencies
         target_link_libraries(${TEST_NAME} ${Boost_LIBRARIES})
                 target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
 
-		#Finally add it to test execution - 
+                #Finally add it to test execution -
         #Notice the WORKING_DIRECTORY and COMMAND
-        add_test(NAME ${TEST_NAME} 
-                 WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH} 
+        add_test(NAME ${TEST_NAME}
+                 WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
                  COMMAND ${TEST_NAME}
         )
 endforeach(SRC_FILE)

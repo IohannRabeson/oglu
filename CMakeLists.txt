@@ -39,11 +39,16 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/Oglu)
 
 # Sources
 set(SRC
-    ${INC_DIR}/OpenGL.hpp
-    ${INC_DIR}/OpenGlError.hpp
+    ${INC_DIR}/OpenGl/OpenGL.hpp
+    ${INC_DIR}/OpenGl/OpenGlError.hpp
+    ${INC_DIR}/OpenGl/OpenGlTypeTraits.hpp
 
     ${INC_DIR}/Generics/StrongInteger.hpp
+    ${INC_DIR}/Generics/Type.hpp
+    ${INC_DIR}/Generics/TypeList.hpp
+    ${INC_DIR}/Generics/LazyCast.hpp
 
+    ${INC_DIR}/Graphics/Color.hpp
     ${INC_DIR}/Graphics/Shader.hpp
     ${INC_DIR}/Graphics/AShaderLoader.hpp
     ${INC_DIR}/Graphics/Shader.hxx
@@ -52,12 +57,15 @@ set(SRC
     ${INC_DIR}/Graphics/Program.hxx
     ${INC_DIR}/Graphics/ProgramLinkException.hpp
     ${INC_DIR}/Graphics/Camera.hpp
+    ${INC_DIR}/Graphics/Mesh.hpp
+    ${INC_DIR}/Graphics/Mesh.hxx
 
     ${INC_DIR}/Window/ContextSettings.hpp
     ${INC_DIR}/Window/Window.hpp
     ${INC_DIR}/Window/IKeyboardListener.hpp
     ${INC_DIR}/Window/IWindowListener.hpp
 
+    ${SRC_DIR}/Graphics/Color.cpp
     ${SRC_DIR}/Graphics/Program.cpp
     ${SRC_DIR}/Graphics/AShaderLoader.cpp
     ${SRC_DIR}/Graphics/ShaderCompilationException.cpp
@@ -113,13 +121,13 @@ target_link_libraries(${APPLICATION_NAME}
                       glfw)
 
 if (BUILD_ALL OR BUILD_DOCUMENTATION)
-	add_subdirectory(doc)
+        add_subdirectory(doc)
 endif()
 
 if (BUILD_ALL OR BUILD_TESTING)
-	add_subdirectory(tests)
+        add_subdirectory(tests)
 endif()
 
 if (BUILD_ALL OR BUILD_EXAMPLES)
-	add_subdirectory(examples)
+        add_subdirectory(examples)
 endif()

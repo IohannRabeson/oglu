@@ -12,7 +12,7 @@
 
 #ifndef OGLU_PROGRAM_HPP
 # define OGLU_PROGRAM_HPP
-# include "Oglu/OpenGl.hpp"
+# include "Oglu/OpenGl/OpenGl.hpp"
 # include "Oglu/Generics/StrongInteger.hpp"
 
 # include <string>
@@ -28,21 +28,29 @@ namespace oglu
     enum class ShaderType : GLenum;
 
     template <ShaderType Type>
-	class Shader;
+    class Shader;
 
-	class Program
-	{
-	public:
+    class Program
+    {
+    public:
         struct UniformInfo
         {
             std::string const name; ///< \brief Parameter name
-            UniformId identifier; ///< \brief Parameter identifier
+            UniformId const identifier; ///< \brief Parameter identifier
             GLint const size; ///< \brief Parameter size
             GLenum const type; ///< \brief Parameter type
         };
 
-		Program();
-		~Program();
+        struct AttributeInfo
+        {
+            std::string const name; ///< \brief Parameter name
+            AttributeId const identifier; ///< \brief Parameter identifier
+            GLint const size; ///< \brief Parameter size
+            GLenum const type; ///< \brief Parameter type
+        };
+
+        Program();
+        ~Program();
 
         GLuint getId()const;
 
@@ -60,13 +68,12 @@ namespace oglu
         template <ShaderType ... Types>
         void link(Shader<Types> const& ... shaders);
 
-		std::string getInfoLog()const;
+        std::string getInfoLog()const;
 
         void use();
         void unuse();
 
         AttributeId getAttributeLocation(std::string const& name)const;
-
         UniformId getUniformLocation(std::string const& name)const;
 
         void setUniform(UniformId id, float v0);
@@ -107,32 +114,35 @@ namespace oglu
         void setUniform(UniformId id, glm::mat4 const& mat);
 
         /*! Overload dedicated to unform array. */
-		template <class T, std::size_t N>
+        template <class T, std::size_t N>
         void setUniform(UniformId id, std::array<T, N> const& array);
 
         /*! Iterate on each uniform's information gathered while linking. */
         void forEachUniformInfo(std::function<void(UniformInfo const&)> &&f)const;
-	private:
+    private:
         template <ShaderType Type, ShaderType ... Types>
-		inline void	attachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
+        inline void	attachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
 
         template <ShaderType Type>
-		inline void	attachImp(Shader<Type> const& shader);
+        inline void	attachImp(Shader<Type> const& shader);
 
         template <ShaderType Type, ShaderType ... Types>
-		inline void	detachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
+        inline void	detachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
 
         template <ShaderType Type>
-		inline void	detachImp(Shader<Type> const& shader);
+        inline void	detachImp(Shader<Type> const& shader);
 
         void gatherUniformInfos();
-	private:
+        void gatherAttributeInfos();
+    private:
         std::map<std::string, UniformId> m_uniformIdentifiers;
-        std::map<UniformId, UniformInfo> m_uniformInfo;
+        std::map<UniformId, UniformInfo> m_uniformInfos;
+        std::map<std::string, AttributeId> m_attributeIdentifiers;
+        std::map<AttributeId, AttributeInfo> m_attributeInfos;
 
         ProgramId const m_programId;
         bool m_used = false;
-	};
+    };
 }
 
 #include "Oglu/Graphics/Program.hxx"

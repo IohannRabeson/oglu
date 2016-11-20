@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "Oglu/Graphics/Program.hpp"
-#include "Oglu/OpenGlError.hpp"
+#include "Oglu/OpenGl/OpenGlError.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace oglu
@@ -293,7 +293,7 @@ namespace oglu
 
     void Program::forEachUniformInfo(std::function<void (const Program::UniformInfo &)> &&f) const
     {
-        for (auto const& kv : m_uniformInfo)
+        for (auto const& kv : m_uniformInfos)
         {
             f(kv.second);
         }
@@ -303,7 +303,6 @@ namespace oglu
     {
         GLuint count = 0;
         GLsizei const bufferSize = 256;
-        GLsizei bufferLength = 0;
         std::unique_ptr<char[]> buffer(new char[bufferSize]);
 
         glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count));
@@ -312,12 +311,35 @@ namespace oglu
             GLint size = 0;
             GLenum type = 0;
 
-            glGetActiveUniform(oglu::get(m_programId), i, bufferSize, &bufferLength, &size, &type, buffer.get());
+            glGetActiveUniform(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get());
 
             std::string const name{buffer.get()};
+            UniformId const id{i};
 
             m_uniformIdentifiers.emplace(name, UniformId{i});
-            m_uniformInfo.emplace(UniformId{i}, UniformInfo{name, UniformId{i}, size, type});
+            m_uniformInfos.emplace(id, UniformInfo{name, id, size, type});
+        }
+    }
+
+    void Program::gatherAttributeInfos()
+    {
+        GLuint count = 0;
+        GLsizei const bufferSize = 256;
+        std::unique_ptr<char[]> buffer(new char[bufferSize]);
+
+        glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count));
+        for (auto i = 0u; i < count; ++i)
+        {
+            GLint size = 0;
+            GLenum type = 0;
+
+            glGetActiveAttrib(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get());
+
+            std::string const name{buffer.get()};
+            AttributeId const id{i};
+
+            m_attributeIdentifiers.emplace(name, id);
+            m_attributeInfos.emplace(id, AttributeInfo{name, id, size, type});
         }
     }
 }

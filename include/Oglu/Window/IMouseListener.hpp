@@ -12,7 +12,7 @@
 
 #ifndef IMOUSELISTENER_HPP
 # define IMOUSELISTENER_HPP
-# include "Oglu/OpenGl.hpp"
+# include "Oglu/OpenGl/OpenGl.hpp"
 # include "Oglu/Window/KeyModifier.hpp"
 # include "Oglu/Window/MouseButton.hpp"
 

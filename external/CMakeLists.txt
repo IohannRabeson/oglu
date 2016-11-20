@@ -9,3 +9,4 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "")
 set(GLFW_INSTALL OFF CACHE BOOL "")
 
 add_subdirectory(glfw)
+add_subdirectory(glm)
