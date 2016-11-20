@@ -16,7 +16,7 @@
 # include "Oglu/Window/ContextSettings.hpp"
 # include "Oglu/Window/KeyModifier.hpp"
 # include "Oglu/Window/MouseButton.hpp"
-# include "Oglu/Graphics/Color.hpp"
+# include "Oglu/Graphics/RgbaColor.hpp"
 
 # include <glm/glm.hpp>
 
@@ -94,46 +94,46 @@ namespace oglu
         Window();
         ~Window();
 
-        bool		create(int width, int height,
-                           std::string const& title,
-                           bool fullscreen,
-                           ContextSettings&& settings = ContextSettings());
-        void		close();
-        bool		isOpen()const;
+        bool create(int width, int height,
+                    std::string const& title,
+                    bool fullscreen,
+                    ContextSettings&& settings = ContextSettings());
+        void close();
+        bool isOpen()const;
 
-        void		clear();
-        void		display();
-        void		pollEvents();
+        void clear();
+        void display();
+        void pollEvents();
 
-        void		setCursorMode(CursorMode mode);
-        void		setClearMode(ClearMode mode);
-        void		setClearColor(Color const& color);
+        void setCursorMode(CursorMode mode);
+        void setClearMode(ClearMode mode);
+        void setClearColor(RgbaColor const& color);
 
-        void		setCursorPosition(glm::dvec2 const& pos);
-        glm::dvec2	getCursorPosition()const;
+        void setCursorPosition(glm::dvec2 const& pos);
+        glm::dvec2 getCursorPosition()const;
 
-        bool		isKeyPressed(int key)const;
+        bool isKeyPressed(int key)const;
 
-        void		registerWindowListener(IWindowListener* listener);
-        void		unregisterWindowListener(IWindowListener* listener);
-        void		registerKeyboardListener(IKeyboardListener* listener);
-        void		unregisterKeyboardListener(IKeyboardListener* listener);
-        void		registerMouseListener(IMouseListener* listener);
-        void		unregisterMouseListener(IMouseListener* listener);
+        void registerWindowListener(IWindowListener* listener);
+        void unregisterWindowListener(IWindowListener* listener);
+        void registerKeyboardListener(IKeyboardListener* listener);
+        void unregisterKeyboardListener(IKeyboardListener* listener);
+        void registerMouseListener(IMouseListener* listener);
+        void unregisterMouseListener(IMouseListener* listener);
     private:
         // TODO: use glm vec when it is possible
-        void		notifyWindowClosed();
-        void		notifyWindowMoved(int x, int y);
-        void		notifyWindowResized(int width, int height);
-        void		notifyWindowFocusGained();
-        void		notifyWindowFocusLost();
-        void		notifyKeyPressed(int key, KeyModifier modifiers);
-        void		notifyKeyReleased(int key, KeyModifier modifiers);
-        void		notifyMouseEntered();
-        void		notifyMouseLeaved();
-        void		notifyMousePressed(MouseButton button, KeyModifier modifiers);
-        void		notifyMouseReleased(MouseButton button, KeyModifier modifiers);
-        void		notifyMouseMoved(double x, double y);
+        void notifyWindowClosed();
+        void notifyWindowMoved(int x, int y);
+        void notifyWindowResized(int width, int height);
+        void notifyWindowFocusGained();
+        void notifyWindowFocusLost();
+        void notifyKeyPressed(int key, KeyModifier modifiers);
+        void notifyKeyReleased(int key, KeyModifier modifiers);
+        void notifyMouseEntered();
+        void notifyMouseLeaved();
+        void notifyMousePressed(MouseButton button, KeyModifier modifiers);
+        void notifyMouseReleased(MouseButton button, KeyModifier modifiers);
+        void notifyMouseMoved(double x, double y);
 
         static void	windowClosedCallback(GLFWwindow* window);
         static void	windowMovedCallback(GLFWwindow* window, int x, int y);
@@ -149,7 +149,7 @@ namespace oglu
             void operator()(GLFWwindow* window);
         };
 
-        Color m_clearColor;
+        RgbaColor m_clearColor;
         std::vector<IWindowListener*> m_windowListeners;
         std::vector<IKeyboardListener*>	m_keyboardListeners;
         std::vector<IMouseListener*> m_mouseListeners;

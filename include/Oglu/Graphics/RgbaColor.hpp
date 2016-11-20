@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Color.hpp                                          :+:      :+:    :+:   */
+/*   RgbaColor.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,22 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#if!defined COLOR_HPP
-# define COLOR_HPP
+#if!defined RGBACOLOR_HPP
+# define RGBACOLOR_HPP
 # include <cstdint>
 
 namespace oglu
 {
-    struct Color
+    struct RgbaColor
     {
-        static Color const Transparent;
-        static Color const White;
-        static Color const Black;
-        static Color const Red;
-        static Color const Green;
-        static Color const Blue;
+        static RgbaColor const Transparent;
+        static RgbaColor const White;
+        static RgbaColor const Black;
+        static RgbaColor const Red;
+        static RgbaColor const Green;
+        static RgbaColor const Blue;
 
-        Color(float red, float green, float blue, float alpha = 1.f) noexcept :
+        RgbaColor(float value) noexcept :
+            r(value),
+            g(value),
+            b(value),
+            a(1.f)
+        {
+        }
+
+        RgbaColor(float red, float green, float blue, float alpha = 1.f) noexcept :
             r(red),
             g(green),
             b(blue),

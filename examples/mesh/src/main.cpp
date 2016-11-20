@@ -16,7 +16,7 @@
 #include <Oglu/Graphics/Program.hpp>
 #include <Oglu/Graphics/Camera.hpp>
 #include <Oglu/Graphics/Mesh.hpp>
-#include <Oglu/Graphics/Color.hpp>
+#include <Oglu/Graphics/RgbaColor.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -68,7 +68,7 @@ class CubeLoader : public Mesh::AMeshModelLoader
         {1.0f,-1.0f, 1.0f}
     };
 
-    std::vector<oglu::Color> const ColorBufferData =
+    std::vector<oglu::RgbaColor> const ColorBufferData =
     {
         {0.583f,  0.771f,  0.014f},
         {0.609f,  0.115f,  0.436f},
@@ -131,7 +131,7 @@ int main( void )
 
     oglu::Program program;
     oglu::Camera camera(45.f, 2880, 1800);
-    Mesh mesh;
+    std::vector<Mesh> mesh;
 
     Mesh mesh2;
 
@@ -143,8 +143,8 @@ int main( void )
     float								moveSpeed = 2.f;
     try
     {
-        program.link(oglu::Shader<oglu::ShaderType::Vertex>(oglu::LoadShaderFromFile("shaders/camera.vert")),
-                     oglu::Shader<oglu::ShaderType::Fragment>(oglu::LoadShaderFromFile("shaders/camera.frag")));
+        program.link(oglu::Shader<oglu::ShaderType::Vertex>(oglu::LoadShaderFromFile("shaders/mesh.vert")),
+                     oglu::Shader<oglu::ShaderType::Fragment>(oglu::LoadShaderFromFile("shaders/mesh.frag")));
 
         auto const uniformCamera = program.getUniformLocation("camera");
 

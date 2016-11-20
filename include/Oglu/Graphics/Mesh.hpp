@@ -14,7 +14,7 @@
 # define MESHMODEL_HPP
 # include "Oglu/OpenGl/OpenGl.hpp"
 # include "Oglu/OpenGl/OpenGlTypeTraits.hpp"
-# include "Oglu/Graphics/Color.hpp"
+# include "Oglu/Graphics/RgbaColor.hpp"
 # include "Oglu/Graphics/Program.hpp"
 # include "Oglu/Generics/TypeList.hpp"
 # include "Oglu/Generics/LazyCast.hpp"
@@ -47,7 +47,7 @@ namespace oglu
 
         struct Color
         {
-            using DataType = oglu::Color;
+            using DataType = oglu::RgbaColor;
             using BaseType = float;
             static constexpr char const* const Label = "Color";
             static constexpr BufferBindingTarget const Target = BufferBindingTarget::VertexBuffer;

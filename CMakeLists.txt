@@ -48,7 +48,7 @@ set(SRC
     ${INC_DIR}/Generics/TypeList.hpp
     ${INC_DIR}/Generics/LazyCast.hpp
 
-    ${INC_DIR}/Graphics/Color.hpp
+    ${INC_DIR}/Graphics/RgbaColor.hpp
     ${INC_DIR}/Graphics/Shader.hpp
     ${INC_DIR}/Graphics/AShaderLoader.hpp
     ${INC_DIR}/Graphics/Shader.hxx
@@ -65,7 +65,7 @@ set(SRC
     ${INC_DIR}/Window/IKeyboardListener.hpp
     ${INC_DIR}/Window/IWindowListener.hpp
 
-    ${SRC_DIR}/Graphics/Color.cpp
+    ${SRC_DIR}/Graphics/RgbaColor.cpp
     ${SRC_DIR}/Graphics/Program.cpp
     ${SRC_DIR}/Graphics/AShaderLoader.cpp
     ${SRC_DIR}/Graphics/ShaderCompilationException.cpp

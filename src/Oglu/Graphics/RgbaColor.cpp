@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Color.cpp                                          :+:      :+:    :+:   */
+/*   RgbaColor.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: irabeson <irabeson@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oglu/Graphics/Color.hpp"
+#include "Oglu/Graphics/RgbaColor.hpp"
 
 namespace oglu
 {
-    Color const Color::Transparent = Color{0.f, 0.f, 0.f, 0.f};
-    Color const Color::White = Color{1.f, 1.f, 1.f, 1.f};
-    Color const Color::Black = Color{0.f, 0.f, 0.f, 1.f};
-    Color const Color::Red = Color{1.f, 0.f, 0.f, 1.f};
-    Color const Color::Green = Color{0.f, 1.f, 0.f, 1.f};
-    Color const Color::Blue = Color{0.f, 0.f, 1.f, 1.f};
+    RgbaColor const RgbaColor::Transparent = RgbaColor{0.f, 0.f, 0.f, 0.f};
+    RgbaColor const RgbaColor::White = RgbaColor{1.f, 1.f, 1.f, 1.f};
+    RgbaColor const RgbaColor::Black = RgbaColor{0.f, 0.f, 0.f, 1.f};
+    RgbaColor const RgbaColor::Red = RgbaColor{1.f, 0.f, 0.f, 1.f};
+    RgbaColor const RgbaColor::Green = RgbaColor{0.f, 1.f, 0.f, 1.f};
+    RgbaColor const RgbaColor::Blue = RgbaColor{0.f, 0.f, 1.f, 1.f};
 }

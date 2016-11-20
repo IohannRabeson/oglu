@@ -37,7 +37,7 @@ namespace oglu
     }
 
     Window::Window() :
-        m_clearColor(Color::Black),
+        m_clearColor(RgbaColor::Black),
         m_window(nullptr),
         m_clearMode(ClearMode::ColorBuffer)
     {
@@ -125,7 +125,7 @@ namespace oglu
         glfwSetInputMode(m_window.get(), GLFW_CURSOR, static_cast<int>(mode));
     }
 
-    void Window::setClearColor(const Color &color)
+    void Window::setClearColor(const RgbaColor &color)
     {
         m_clearColor = color;
     }

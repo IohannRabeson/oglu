@@ -1,4 +1,4 @@
-project(camera)
+project(mesh)
 
 set(APPLICATION_NAME mesh.app)
 set(INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -10,8 +10,8 @@ set(SRC
 )
 
 set(SHADER_SRC
-        ${SHD_DIR}/camera.frag
-        ${SHD_DIR}/camera.vert
+    ${SHD_DIR}/mesh.frag
+    ${SHD_DIR}/mesh.vert
 )
 
 include_directories(${INC_DIR})
@@ -26,9 +26,9 @@ set_property(TARGET ${APPLICATION_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 target_link_libraries(${APPLICATION_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
 
 if (XCODE OR MSVC)
-        set(DESTINATION_SHADER ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/shaders)
+    set(DESTINATION_SHADER ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/shaders)
 else()
-        set(DESTINATION_SHADER ${EXECUTABLE_OUTPUT_PATH}/shaders)
+    set(DESTINATION_SHADER ${EXECUTABLE_OUTPUT_PATH}/shaders)
 endif()
 
 copy_files(${DESTINATION_SHADER} ${APPLICATION_NAME} "${SHADER_SRC}")
