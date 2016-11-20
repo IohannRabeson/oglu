@@ -145,10 +145,7 @@ namespace oglu
 
         /*! Assign mesh datas using a loader.
          *
-         *  A Vertex Array Object is generated and orders to draw the model are
-         *  stored into it.
-         *
-         *  \tparam Loader This class must inerite of AMeshModelLoader.
+         *  \tparam Loader This class must inherits from AMeshModelLoader.
          */
         template <typename Loader>
         void load(Loader&& loader);

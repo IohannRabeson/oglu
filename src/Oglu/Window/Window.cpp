@@ -16,6 +16,7 @@
 #include "Oglu/Window/IMouseListener.hpp"
 #include "Oglu/OpenGl/OpenGlError.hpp"
 #include "Oglu/Graphics/Shader.hpp"
+#include "Oglu/Generics/LazyCast.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -36,8 +37,9 @@ namespace oglu
     }
 
     Window::Window() :
+        m_clearColor(Color::Black),
         m_window(nullptr),
-        m_clearMode(GL_COLOR_BUFFER_BIT)
+        m_clearMode(ClearMode::ColorBuffer)
     {
     }
 
@@ -86,7 +88,7 @@ namespace oglu
             {
                 glEnable(GL_DEPTH_TEST);
                 glDepthFunc(GL_LESS); // TODO: remove (default value is GL_LESS)
-                m_clearMode |= GL_DEPTH_BUFFER_BIT;
+                m_clearMode = static_cast<ClearMode>(lazyCast(m_clearMode) | lazyCast(ClearMode::DepthBuffer));
             }
             // TODO: when an Application class will comes this line
             // will should be removed.
@@ -114,14 +116,18 @@ namespace oglu
 
     void Window::clear()
     {
-        glClearColor(0.0f, 0.0f, 0.4f, 1.0f);
-        glClear(m_clearMode);
+        glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+        glClear(lazyCast(m_clearMode));
     }
-
 
     void Window::setCursorMode(CursorMode mode)
     {
         glfwSetInputMode(m_window.get(), GLFW_CURSOR, static_cast<int>(mode));
+    }
+
+    void Window::setClearColor(const Color &color)
+    {
+        m_clearColor = color;
     }
 
     glm::dvec2	Window::getCursorPosition()const

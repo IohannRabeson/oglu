@@ -38,13 +38,6 @@ namespace oglu
         float b;
         float a;
     };
-
-    Color const Color::Transparent = Color{0.f, 0.f, 0.f, 0.f};
-    Color const Color::White = Color{1.f, 1.f, 1.f, 1.f};
-    Color const Color::Black = Color{0.f, 0.f, 0.f, 1.f};
-    Color const Color::Red = Color{1.f, 0.f, 0.f, 1.f};
-    Color const Color::Green = Color{0.f, 1.f, 0.f, 1.f};
-    Color const Color::Blue = Color{0.f, 0.f, 1.f, 1.f};
 }
 
 #endif

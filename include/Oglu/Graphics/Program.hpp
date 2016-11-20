@@ -50,6 +50,8 @@ namespace oglu
         };
 
         Program();
+        Program(Program const&) = delete;
+        Program& operator = (Program const&) = delete;
         ~Program();
 
         GLuint getId()const;
@@ -117,8 +119,11 @@ namespace oglu
         template <class T, std::size_t N>
         void setUniform(UniformId id, std::array<T, N> const& array);
 
-        /*! Iterate on each uniform's information gathered while linking. */
+        /*! Iterate on each uniform information gathered while linking. */
         void forEachUniformInfo(std::function<void(UniformInfo const&)> &&f)const;
+
+        /*! Iterate on each attribute information gathered while linking. */
+        void forEachAttributeInfo(std::function<void(AttributeInfo const&)> &&f)const;
     private:
         template <ShaderType Type, ShaderType ... Types>
         inline void	attachImp(Shader<Type> const& shader, Shader<Types> const& ... shaders);
