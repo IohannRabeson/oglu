@@ -25,7 +25,7 @@ namespace oglu
         static Color const Green;
         static Color const Blue;
 
-        Color(float red, float green, float blue, float alpha = 1.f) :
+        Color(float red, float green, float blue, float alpha = 1.f) noexcept :
             r(red),
             g(green),
             b(blue),
