@@ -133,6 +133,8 @@ int main( void )
     oglu::Camera camera(45.f, 2880, 1800);
     Mesh mesh;
 
+    Mesh mesh2;
+
     float 								lastTime = 0.f;
     float								currentTime = 0.f;
     float								frameTime = 0.f;
@@ -152,15 +154,25 @@ int main( void )
         mesh.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
         mesh.load(CubeLoader());
 
+        mesh2.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
+        mesh2.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
+        mesh2.load(CubeLoader());
+
         render.setCursorPosition(glm::dvec2(0, 0));
         render.setCursorMode(oglu::Window::CursorMode::Disabled);
+
+        glm::mat4 model = glm::mat4(1.f);
+
+        model = glm::translate(model, glm::vec3(-2.f));
         while (render.isOpen())
         {
             render.pollEvents();
             render.clear();
             program.use();
-            program.setUniform(uniformCamera, camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getMatrix() * model);
             mesh.render();
+            program.setUniform(uniformCamera, camera.getMatrix());
+            mesh2.render();
             program.unuse();
             render.display();
             // Mouse control
@@ -193,6 +205,7 @@ int main( void )
             {
                 camera.move(frameTime * -moveSpeed * camera.getUp());
             }
+            model = glm::rotate(model, frameTime, glm::vec3(0.f, 1.f, 0.f));
             frameTime = currentTime - lastTime;
             lastTime = currentTime;
             currentTime = glfwGetTime();

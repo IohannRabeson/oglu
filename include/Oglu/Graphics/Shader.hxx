@@ -88,7 +88,7 @@ namespace oglu
     }
 
     template <ShaderType Type>
-    ShaderId Shader<Type>::getId()const
+    ShaderId Shader<Type>::getId()const noexcept
     {
         return (m_shaderId);
     }

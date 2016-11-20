@@ -33,7 +33,7 @@ namespace oglu
          */
         void load(AShaderLoader&& loader);
 
-        ShaderId getId()const;
+        ShaderId getId()const noexcept;
         std::string	getInfoLog()const;
     private:
         void compile();

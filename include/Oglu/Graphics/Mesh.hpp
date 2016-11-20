@@ -137,13 +137,16 @@ namespace oglu
         class Storage;
     public:
         Mesh();
-        ~Mesh();
+        virtual ~Mesh();
 
         /*! Assign component datas to a program's attribute. */
         template <typename Component>
         void setAttribute(AttributeId attributeId);
 
         /*! Assign mesh datas using a loader.
+         *
+         *  A Vertex Array Object is generated and orders to draw the model are
+         *  stored into it.
          *
          *  \tparam Loader This class must inerite of AMeshModelLoader.
          */
