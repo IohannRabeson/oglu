@@ -43,13 +43,13 @@ namespace oglu
     template <typename Loader>
     void Mesh<Components...>::load(Loader&& loader)
     {
-        loadImp(std::forward<AMeshModelLoader>(loader));
+        loadImp(std::forward<Loader>(loader));
     }
 
     template <typename ... Components>
-    void Mesh<Components...>::render()const
+    void Mesh<Components...>::render(std::function<void(std::size_t)>&& mode)const
     {
-        glBindVertexArray(m_vertexArray);
+        GL_CHECK( glBindVertexArray(m_vertexArray) );
 
         // Call enableVertexAttribute() for each storage in m_storages
         oglu::forEach<ComponentList>([this](auto t)
@@ -60,7 +60,7 @@ namespace oglu
             storage.enableVertexAttribute();
         });
 
-        glDrawArrays(GL_TRIANGLES, 0, m_verticeCount);
+        mode(m_verticeCount);
 
         // Call disableVertexAttribute() for each storage in m_storages
         oglu::forEach<ComponentList>([this](auto t)
@@ -96,13 +96,15 @@ namespace oglu
     {
         glBindVertexArray(m_vertexArray);
 
+        loader.beginLoading();
         oglu::forEach<ComponentList>([this, &loader](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
             auto& storage = getStorage<ComponentType>();
 
-            storage.load(loader);
+            storage.load(ComponentType{}, loader);
         });
+        loader.endLoading();
 
         m_verticeCount = getStorage<ModelComponents::Position>().size();
 
@@ -147,10 +149,10 @@ namespace oglu
             m_attribute = attributeId;
         }
 
-        std::size_t load(AMeshModelComponentLoader<Component>& loader)
+        std::size_t load(Component, AMeshModelComponentLoader<Component>& loader)
         {
             using DataType = typename Component::DataType;
-            loader.template load(m_components);
+            loader.template load(Component{}, m_components);
 
             GL_CHECK( glBindBuffer(oglu::lazyCast(Component::Target), m_buffer) );
             GL_CHECK( glBufferData(oglu::lazyCast(Component::Target), sizeof(DataType) * m_components.size(), m_components.data(), GL_STATIC_DRAW) );

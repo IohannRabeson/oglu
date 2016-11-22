@@ -29,6 +29,7 @@ namespace oglu
         void setPosition(glm::vec3 const& position);
         void translate(glm::vec3 const& offset);
         void setRotation(const glm::quat &rotation);
+        void setRotation(float degres, const glm::vec3 &axis);
         void rotate(float degres, glm::vec3 const& axis);
         void setScale(glm::vec3 const& scale);
 
@@ -37,6 +38,7 @@ namespace oglu
         glm::vec3 const& getScale()const;
 
         glm::mat4 const& getMatrix()const;
+
     private:
         void updateCache()const;
     private:

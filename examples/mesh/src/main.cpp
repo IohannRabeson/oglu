@@ -26,7 +26,7 @@
 
 using Mesh = oglu::Mesh<oglu::ModelComponents::Position, oglu::ModelComponents::Color>;
 
-class CubeLoader : public Mesh::AMeshModelLoader
+class CubeLoader : public oglu::AMeshModelLoader<Mesh>
 {
     std::vector<glm::vec3> const PositionBufferData =
     {
@@ -108,12 +108,12 @@ class CubeLoader : public Mesh::AMeshModelLoader
         {0.982f,  0.099f,  0.879f}
     };
 
-    void load(std::vector<oglu::ModelComponents::Position::DataType>& positions) override
+    void load(oglu::ModelComponents::Position, std::vector<oglu::ModelComponents::Position::DataType>& positions) override
     {
         positions.assign(std::begin(PositionBufferData), std::end(PositionBufferData));
     }
 
-    void load(std::vector<oglu::ModelComponents::Color::DataType>& colors) override
+    void load(oglu::ModelComponents::Color, std::vector<oglu::ModelComponents::Color::DataType>& colors) override
     {
         colors = ColorBufferData;
     }
@@ -169,9 +169,9 @@ int main( void )
             render.pollEvents();
             render.clear();
             program.use();
-            program.setUniform(uniformCamera, camera.getMatrix() * model);
+            program.setUniform(uniformCamera, camera.getViewProjectionMatrix() * model);
             mesh.render();
-            program.setUniform(uniformCamera, camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getViewProjectionMatrix());
             mesh2.render();
             program.unuse();
             render.display();

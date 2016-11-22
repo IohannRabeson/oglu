@@ -179,7 +179,7 @@ int main( void )
             render.pollEvents();
             render.clear();
             program.use();
-            program.setUniform(uniformCamera, camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getViewProjectionMatrix());
             glBindVertexArray(VertexArrayID);
             glEnableVertexAttribArray(oglu::get(vertexPositionId));
             glEnableVertexAttribArray(oglu::get(vertexColorId));

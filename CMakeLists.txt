@@ -48,6 +48,11 @@ set(SRC
     ${INC_DIR}/Generics/TypeList.hpp
     ${INC_DIR}/Generics/LazyCast.hpp
 
+    ${INC_DIR}/Parsers/RadixTree.hpp
+    ${INC_DIR}/Parsers/RadixTree.hxx
+    ${INC_DIR}/Parsers/Parsers.hpp
+    ${INC_DIR}/Parsers/Parsers.cpp
+
     ${INC_DIR}/Graphics/RgbaColor.hpp
     ${INC_DIR}/Graphics/Shader.hpp
     ${INC_DIR}/Graphics/AShaderLoader.hpp
@@ -59,6 +64,7 @@ set(SRC
     ${INC_DIR}/Graphics/Camera.hpp
     ${INC_DIR}/Graphics/Mesh.hpp
     ${INC_DIR}/Graphics/Mesh.hxx
+    ${INC_DIR}/Graphics/ObjMeshLoader.hpp
     ${INC_DIR}/Graphics/Transform.hpp
 
     ${INC_DIR}/Window/ContextSettings.hpp
@@ -73,6 +79,7 @@ set(SRC
     ${SRC_DIR}/Graphics/ProgramLinkException.cpp
     ${SRC_DIR}/Graphics/Camera.cpp
     ${SRC_DIR}/Graphics/Transform.cpp
+    ${SRC_DIR}/Graphics/ObjMeshLoader.cpp
 
     ${SRC_DIR}/Window/Window.cpp
     ${SRC_DIR}/Window/IKeyboardListener.cpp
@@ -93,7 +100,7 @@ add_definitions(-Wextra -Werror -Wall)
 # Build
 add_library(${CMAKE_PROJECT_NAME} ${SRC})
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_auto_type)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_constexpr)

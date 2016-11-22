@@ -313,13 +313,13 @@ namespace oglu
         GLsizei const bufferSize = 256;
         std::unique_ptr<char[]> buffer(new char[bufferSize]);
 
-        glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count));
+        GL_CHECK( glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count)) );
         for (auto i = 0u; i < count; ++i)
         {
             GLint size = 0;
             GLenum type = 0;
 
-            glGetActiveUniform(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get());
+            GL_CHECK( glGetActiveUniform(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get()) );
 
             std::string const name{buffer.get()};
             UniformId const id{i};
@@ -335,13 +335,13 @@ namespace oglu
         GLsizei const bufferSize = 256;
         std::unique_ptr<char[]> buffer(new char[bufferSize]);
 
-        glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_UNIFORMS, reinterpret_cast<GLint*>(&count));
+        GL_CHECK( glGetProgramiv(oglu::get(m_programId), GL_ACTIVE_ATTRIBUTES, reinterpret_cast<GLint*>(&count)) );
         for (auto i = 0u; i < count; ++i)
         {
             GLint size = 0;
             GLenum type = 0;
 
-            glGetActiveAttrib(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get());
+            GL_CHECK( glGetActiveAttrib(oglu::get(m_programId), i, bufferSize, nullptr, &size, &type, buffer.get()) );
 
             std::string const name{buffer.get()};
             AttributeId const id{i};
