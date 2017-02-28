@@ -106,7 +106,7 @@ namespace oglu
         });
         loader.endLoading();
 
-        m_verticeCount = getStorage<ModelComponents::Position>().size();
+        m_verticeCount = getStorage<MeshComponents::Position>().size();
 
         assert( checkStoragesHaveSameVerticeCount() );
 
@@ -122,7 +122,7 @@ namespace oglu
     }
 
     /*!
-     *  Handle a Vertex Buffer dedicated to a particular Component.
+     *  \brief Handle a Vertex Buffer dedicated to a particular Component.
      */
     template <typename ... Components>
     template <typename Component>
@@ -149,7 +149,7 @@ namespace oglu
             m_attribute = attributeId;
         }
 
-        std::size_t load(Component, AMeshModelComponentLoader<Component>& loader)
+        std::size_t load(Component, AMeshComponentLoader<Component>& loader)
         {
             using DataType = typename Component::DataType;
             loader.template load(Component{}, m_components);

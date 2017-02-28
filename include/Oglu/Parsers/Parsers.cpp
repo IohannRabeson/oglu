@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Oglu/Parsers/Parsers.hpp"
+#include <cassert>
 
 namespace oglu
 {
@@ -43,6 +44,8 @@ namespace oglu
 
     bool ParserState::advance()
     {
+        assert(m_isOk == true);
+
         return ++m_current != m_end;
     }
 
@@ -58,7 +61,8 @@ namespace oglu
 
     bool ParserState::matchCurrent(char c) const
     {
-        // TODO: ensure m_isOk == true
+        assert(m_isOk == true);
+
         bool result = false;
 
         if (m_current != m_end && c == *m_current)

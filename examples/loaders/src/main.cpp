@@ -26,7 +26,7 @@
 
 #include <glm/ext.hpp>
 
-using Mesh = oglu::Mesh<oglu::ModelComponents::Position, oglu::ModelComponents::Normal>;
+using Mesh = oglu::Mesh<oglu::MeshComponents::Position, oglu::MeshComponents::Normal>;
 
 int main( void )
 {
@@ -63,9 +63,9 @@ int main( void )
 
         for (auto& mesh : meshes)
         {
-            mesh.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
-            mesh.setAttribute<oglu::ModelComponents::Normal>(program.getAttributeLocation("vertexNormal"));
-            mesh.load(oglu::ObjMeshLoader<Mesh>("models/susan.obj"));
+            mesh.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
+            mesh.setAttribute<oglu::MeshComponents::Normal>(program.getAttributeLocation("vertexNormal"));
+            mesh.load(oglu::ObjMeshLoader<Mesh>("models/susan_smooth.obj"));
         }
         for (auto i = 0u; i < transforms.size(); ++i)
         {

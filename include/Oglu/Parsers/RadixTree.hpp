@@ -23,7 +23,7 @@ namespace oglu
     template <typename C, typename T, T DefaultValue, T RootValue>
     class RadixTreeBase
     {
-        class 								Node;
+        class Node;
         // shared_ptr works since they're no loop
         // TODO: replace shared_ptr by unique_ptr?
         using NodePtr = std::shared_ptr<Node>;
@@ -48,8 +48,8 @@ namespace oglu
         std::pair<StringIterator, bool> tryGetValue(StringIterator begin, StringIterator end, T& value)const;
         bool contains(String const& word)const;
     private:
-        static NodePtr addLetter(NodePtr& current, C letter, T const& value);
-        static NodePtr addLetter(NodePtr& current, C letter);
+        static auto addLetter(NodePtr& current, C letter, T const& value) -> NodePtr;
+        static auto addLetter(NodePtr& current, C letter) -> NodePtr;
     private:
         NodePtr	m_root;
     };

@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_SUITE ( string_converter )
  *  \brief Extract a value from a string and test if:
  *  - the parser is ok
  *  - the parser has consumed each character of text
- *  \throw FormatException
+ *  \throw FormatException if one of theses checks fails.
  */
 template <typename T>
 static inline T parse(std::string const& text)

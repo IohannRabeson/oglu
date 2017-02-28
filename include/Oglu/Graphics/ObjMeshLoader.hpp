@@ -25,7 +25,7 @@ namespace oglu
     class ObjMeshLoader;
 
     template <typename ... Components>
-    class ObjMeshLoader<Mesh<Components...>> : public AMeshModelLoader<Components...>
+    class ObjMeshLoader<Mesh<Components...>> : public AMeshLoader<Components...>
     {
         using MyType = ObjMeshLoader<Mesh<Components...>>;
     public:
@@ -35,7 +35,8 @@ namespace oglu
             m_loadingFunctions["#"] = std::bind(&MyType::noOp, this, std::placeholders::_1);
             m_loadingFunctions["v"] = std::bind(&MyType::readPosition, this, std::placeholders::_1);
             m_loadingFunctions["vn"] = std::bind(&MyType::readNormal, this, std::placeholders::_1);
-            m_loadingFunctions["f"] = std::bind(&MyType::readTriangle, this, std::placeholders::_1);
+            m_loadingFunctions["vt"] = std::bind(&MyType::readTexture, this, std::placeholders::_1);
+            m_loadingFunctions["f"] = std::bind(&MyType::readFace, this, std::placeholders::_1);
         }
 
         void beginLoading() override
@@ -55,8 +56,7 @@ namespace oglu
 
                 if (keySize != std::string::npos)
                 {
-                    std::string key = line.substr(0u, keySize);
-
+                    auto const key = line.substr(0u, keySize);
                     auto const loaderIt = m_loadingFunctions.find(key);
 
                     if (loaderIt != m_loadingFunctions.end())
@@ -72,21 +72,36 @@ namespace oglu
             }
         }
 
-        void load(oglu::ModelComponents::Position, std::vector<oglu::ModelComponents::Position::DataType>& positions) override
+        void load(oglu::MeshComponents::Position, std::vector<oglu::MeshComponents::Position::DataType>& positions)
         {
             for (auto const index : m_positionIndexes)
             {
                 if (index < m_positions.size())
+                {
                     positions.push_back(m_positions.at(index));
+                }
             }
         }
 
-        void load(oglu::ModelComponents::Normal, std::vector<oglu::ModelComponents::Normal::DataType>& normals) override
+        void load(oglu::MeshComponents::Normal, std::vector<oglu::MeshComponents::Normal::DataType>& normals)
         {
             for (auto const index : m_normalIndexes)
             {
                 if (index < m_normals.size())
+                {
                     normals.push_back(m_normals.at(index));
+                }
+            }
+        }
+
+        void load(oglu::MeshComponents::TextureUV, std::vector<oglu::MeshComponents::TextureUV::DataType>& textures)
+        {
+            for (auto const index : m_textureIndexes)
+            {
+                if (index < m_textures.size())
+                {
+                    textures.push_back(m_textures.at(index));
+                }
             }
         }
     private:
@@ -124,6 +139,23 @@ namespace oglu
             return state.isOk();
         }
 
+        bool readTexture(std::string const& line)
+        {
+            auto state = Parser::begin(line);
+            glm::vec3 vertex;
+
+            state = Parser::expect(std::move(state), 'v');
+            state = Parser::expect(std::move(state), 't');
+            state = Parser::skips(std::move(state), [](char c){return std::isspace(c);});
+            state = Parser::parse<float>(std::move(state), vertex.x);
+            state = Parser::skips(std::move(state), [](char c){return std::isspace(c);});
+            state = Parser::parse<float>(std::move(state), vertex.y);
+            state = Parser::skips(std::move(state), [](char c){return std::isspace(c);});
+            state = Parser::parse<float>(std::move(state), vertex.z);
+            m_textures.emplace_back(std::move(vertex));
+            return state.isOk();
+        }
+
         bool readNormal(std::string const& line)
         {
             auto state = Parser::begin(line);
@@ -141,7 +173,7 @@ namespace oglu
             return state.isOk();
         }
 
-        bool readTriangle(std::string const& line)
+        bool readFace(std::string const& line)
         {
             auto state = Parser::begin(line);
 
@@ -194,6 +226,7 @@ namespace oglu
 
         Vec3List m_positions;
         Vec3List m_normals;
+        Vec3List m_textures;
 
         IndexList m_positionIndexes;
         IndexList m_textureIndexes;

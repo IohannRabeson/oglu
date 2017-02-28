@@ -12,6 +12,7 @@ set(SRC
 
 set(MODEL_SRC
     ${MODELS_DIR}/susan.obj
+    ${MODELS_DIR}/susan_smooth.obj
     ${MODELS_DIR}/cube.obj
 )
 

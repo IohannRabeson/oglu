@@ -40,21 +40,27 @@ namespace oglu
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    void		RadixTreeBase<C, T, DefaultValue, RootValue>::exportDotLabel(ConstNodePtr node, OStream& os)
+    void RadixTreeBase<C, T, DefaultValue, RootValue>::exportDotLabel(ConstNodePtr node, OStream& os)
     {
         os << reinterpret_cast<std::size_t>(node->get()) << " [label = \"";
         if (node->isRoot() == RootValue)
+        {
             os << "root";
+        }
         else
+        {
             os << node->getKey();
+        }
         os << "\"";
         if (node->getValue() != DefaultValue && node->getValue() != RootValue)
+        {
             os << ",style=filled,fillcolor=\"palegreen\"";
+        }
         os << "];\n";
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    void	RadixTreeBase<C, T, DefaultValue, RootValue>::exportDot(OStream& os, String const& graphName)const
+    void RadixTreeBase<C, T, DefaultValue, RootValue>::exportDot(OStream& os, String const& graphName)const
     {
         std::set<ConstNodePtr>	nodes;
 
@@ -68,7 +74,7 @@ namespace oglu
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    void	RadixTreeBase<C, T, DefaultValue, RootValue>::addWord(String const& word, T const& value)
+    void RadixTreeBase<C, T, DefaultValue, RootValue>::addWord(String const& word, T const& value)
     {
         if (word.empty())
             return;
@@ -78,18 +84,22 @@ namespace oglu
         while (current && it != word.cend())
         {
             if (it + 1 == word.cend())
+            {
                 current = addLetter(current, *it, value);
+            }
             else
+            {
                 current = addLetter(current, *it);
+            }
             ++it;
         }
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    void	RadixTreeBase<C, T, DefaultValue, RootValue>::completeWord(String const& beginStr, std::vector<String>& results)const
+    void RadixTreeBase<C, T, DefaultValue, RootValue>::completeWord(String const& beginStr, std::vector<String>& results)const
     {
-        ConstNodePtr	current = m_root;
-        auto			it = beginStr.begin();
+        ConstNodePtr current = m_root;
+        auto it = beginStr.begin();
 
         if (beginStr.empty())
             return;
@@ -97,7 +107,9 @@ namespace oglu
         {
             current = current->getNext(*it);
             if (current == nullptr || current->getKey() != *it)
+            {
                 return;
+            }
             ++it;
         }
         if (current && it == beginStr.end())
@@ -110,13 +122,13 @@ namespace oglu
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    void	RadixTreeBase<C, T, DefaultValue, RootValue>::getWords(std::vector<String>& results)const
+    void RadixTreeBase<C, T, DefaultValue, RootValue>::getWords(std::vector<String>& results)const
     {
         m_root->getWords(results);
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    bool	RadixTreeBase<C, T, DefaultValue, RootValue>::contains(String const& word)const
+    bool RadixTreeBase<C, T, DefaultValue, RootValue>::contains(String const& word)const
     {
         ConstNodePtr current = m_root;
         auto it = word.begin();
@@ -127,7 +139,9 @@ namespace oglu
         {
             current = current->getNext(*it);
             if (current == nullptr || current->getKey() != *it)
+            {
                 return (false);
+            }
             ++it;
         }
         return (current && current->getValue() != DefaultValue && it == word.end());
@@ -145,7 +159,9 @@ namespace oglu
         {
             current = current->getNext(*it);
             if (current == nullptr || current->getKey() != *it)
+            {
                 return (false);
+            }
             ++it;
         }
 
@@ -171,7 +187,9 @@ namespace oglu
         {
             current = current->getNext(*it);
             if (current == nullptr || current->getKey() != *it)
+            {
                 return (std::make_pair(it, false));
+            }
             ++it;
         }
 
@@ -198,7 +216,7 @@ namespace oglu
     }
 
     template <class C, class T, T DefaultValue, T RootValue>
-    typename RadixTreeBase<C, T, DefaultValue, RootValue>::NodePtr	RadixTreeBase<C, T, DefaultValue, RootValue>::addLetter(NodePtr& current, C letter)
+    auto RadixTreeBase<C, T, DefaultValue, RootValue>::addLetter(NodePtr& current, C letter) -> NodePtr
     {
         NodePtr	next;
 
@@ -208,13 +226,14 @@ namespace oglu
         }
         return (next);
     }
+
     //
     //	class RadixTreeBase::Node
     //
     template <class C, class T, T DefaultValue, T RootValue>
-    class 	RadixTreeBase<C, T, DefaultValue, RootValue>::Node : public std::enable_shared_from_this<Node>
+    class RadixTreeBase<C, T, DefaultValue, RootValue>::Node : public std::enable_shared_from_this<Node>
     {
-        static String	formatDotNodeName(ConstNodePtr node)
+        static String formatDotNodeName(ConstNodePtr node)
         {
             std::basic_ostringstream<C>	os;
 
@@ -222,17 +241,21 @@ namespace oglu
             return (os.str());
         }
 
-        static void		getWordsImp(ConstNodePtr const& node, String buffer, std::vector<String>& results)
+        static void getWordsImp(ConstNodePtr const& node, String buffer, std::vector<String>& results)
         {
-            C			key = node->getKey();
+            C key = node->getKey();
 
             if (key != NullKey)
+            {
                 buffer.push_back(key);
+            }
             if (node->getValue() != DefaultValue && buffer.empty() == false)
+            {
                 results.push_back(buffer);
+            }
             if (node->hasNexts())
             {
-                auto		it = node->begin();
+                auto it = node->begin();
 
                 getWordsImp(it->second, buffer, results);
                 ++it;
@@ -244,8 +267,8 @@ namespace oglu
             }
         }
     public:
-        typedef typename std::map<C, NodePtr>::iterator			ChildIterator;
-        typedef typename std::map<C, NodePtr>::const_iterator	ChildConstIterator;
+        using ChildIterator = typename std::map<C, NodePtr>::iterator;
+        using ChildConstIterator = typename std::map<C, NodePtr>::const_iterator;
 
         explicit Node(C key) :
             Node(key, DefaultValue)
@@ -258,14 +281,14 @@ namespace oglu
         {
         }
 
-        void				getWords(std::vector<String>& results)const
+        void getWords(std::vector<String>& results)const
         {
             getWordsImp(this->shared_from_this(), String(), results);
         }
 
-        NodePtr				getOrCreate(C key, T const& value)
+        NodePtr getOrCreate(C key, T const& value)
         {
-            auto	it = m_nexts.find(key);
+            auto it = m_nexts.find(key);
             NodePtr	result;
 
             if (it == m_nexts.end())
@@ -285,9 +308,9 @@ namespace oglu
             return (result);
         }
 
-        NodePtr				getOrCreate(C key)
+        NodePtr getOrCreate(C key)
         {
-            auto	it = m_nexts.find(key);
+            auto it = m_nexts.find(key);
             NodePtr	result;
 
             if (it == m_nexts.end())
@@ -302,69 +325,71 @@ namespace oglu
             return (result);
         }
 
-        void				exportDot(OStream& os, std::set<ConstNodePtr>& nodes)
+        void exportDot(OStream& os, std::set<ConstNodePtr>& nodes)
         {
             nodes.insert(this->shared_from_this());
+
             for (auto const& p : m_nexts)
             {
-                os << formatDotNodeName(this->shared_from_this()) << " -> " <<
-                      formatDotNodeName(p.second) << ";\n";
+                os << formatDotNodeName(this->shared_from_this()) << " -> " << formatDotNodeName(p.second) << ";\n";
                 p.second->exportDot(os, nodes);
             }
         }
 
-        NodePtr				getNext(C key)const
+        NodePtr getNext(C key)const
         {
             auto	it = m_nexts.find(key);
             NodePtr	result;
 
             if (it != m_nexts.end())
+            {
                 result = it->second;
+            }
             return (result);
         }
 
-        C					getKey()const
+        C getKey()const
         {
             return (m_key);
         }
 
-        T const&			getValue()const
+        T const& getValue()const
         {
             return (m_value);
         }
 
-        bool				hasNexts()const
+        bool hasNexts()const
         {
             return (m_nexts.empty() == false);
         }
 
-        bool				isRoot()const
+        bool isRoot()const
         {
             return (m_value == RootValue);
         }
 
-        ChildIterator		begin()
+        ChildIterator begin()
         {
             return (m_nexts.begin());
         }
 
-        ChildIterator		end()
+        ChildIterator end()
         {
             return (m_nexts.end());
         }
 
-        ChildConstIterator	begin()const
+        ChildConstIterator begin()const
         {
             return (m_nexts.begin());
         }
 
-        ChildConstIterator	end()const
+        ChildConstIterator end()const
         {
             return (m_nexts.end());
         }
     private:
-        std::map<C, NodePtr>	m_nexts;
-        T						m_value;
-        C						m_key;
+        std::map<C, NodePtr> m_nexts;
+        T m_value;
+        C m_key;
     };
 }

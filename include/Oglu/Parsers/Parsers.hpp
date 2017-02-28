@@ -29,6 +29,9 @@ namespace oglu
 
         Iterator end()const;
 
+        /*! Advance of one character.
+         *  \returns true if the current character is readable.
+         */
         bool advance();
 
         bool isOk()const;

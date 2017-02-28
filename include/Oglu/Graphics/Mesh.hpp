@@ -28,7 +28,7 @@
 
 namespace oglu
 {
-    namespace ModelComponents
+    namespace MeshComponents
     {
         struct Position
         {
@@ -74,16 +74,16 @@ namespace oglu
     /*!
      * \brief Abstraction of a component data type loader.
      * \details Provide a method load() used to get datas for one component.
-     *You should not use this class directly but AMeshModelLoader.
+     *  You should not use this class directly but AMeshModelLoader.
      */
     template <typename Component>
-    class AMeshModelComponentLoader
+    class AMeshComponentLoader
     {
     protected:
         using ComponentType = Component;
         using DataType = typename Component::DataType;
 
-        virtual ~AMeshModelComponentLoader()
+        virtual ~AMeshComponentLoader()
         {
         }
     public:
@@ -121,19 +121,19 @@ namespace oglu
      * };
      * \endcode
      *
-     * The order of calls to each load methods is defined by the components list.<br>
+     * The order of calls of each 'load' methods is defined by the components list.<br>
      * In the previous example, positions are loaded first, followed by colors because Position is the
      * first component passed as template parameter of MeshModel.
      */
     template <typename ... Components>
-    class AMeshModelLoader : public AMeshModelComponentLoader<Components>...
+    class AMeshLoader : public AMeshComponentLoader<Components>...
     {
-        AMeshModelLoader(AMeshModelLoader const&) = delete;
-        AMeshModelLoader& operator = (AMeshModelLoader const&) = delete;
+        AMeshLoader(AMeshLoader const&) = delete;
+        AMeshLoader& operator = (AMeshLoader const&) = delete;
     public:
-        AMeshModelLoader() = default;
+        AMeshLoader() = default;
 
-        virtual ~AMeshModelLoader()
+        virtual ~AMeshLoader()
         {
         }
 
@@ -165,21 +165,32 @@ namespace oglu
     };
 
     /*!
-     *  \brief Allow to take an oglu::Mesh as template parameter.
+     *  \brief Specialization which allows to use a Mesh type instead of a variadic lists of components.
      *  \code
-     *  using MyMesh = oglu::Mesh<Nanani, Nanana>;
+     *  using MyMesh = oglu::Mesh<oglu::MeshComponents::Position, oglu::MeshComponents::Normal>;
      *
-     *  class NanaLoader : public oglu::AMeshModelLoader<MyMesh> // MyMesh instead of Nanani, Nanana
+     *  class NanaLoader : public oglu::AMeshModelLoader<MyMesh> // MyMesh instead of oglu::MeshComponents::Position, oglu::MeshComponents::Normal
      *  {
      *      ...
      *  };
      *  \endcode
      */
     template <typename ... Components>
-    class AMeshModelLoader<Mesh<Components...>> : public AMeshModelLoader<Components...>
+    class AMeshLoader<Mesh<Components...>> : public AMeshLoader<Components...>
     {
     };
 
+    /*!
+     *  \brief Stores vertices of a mesh.
+     *  \tparam Components List of components stored for each vertices
+     *
+     *  \code
+     *  // Mesh with vertices composed by positions and normals.
+     *  using Mesh = oglu::Mesh<oglu::MeshComponents::Position, oglu::MeshComponents::Normal>;
+     *  using TexturedMesh = oglu::Mesh<oglu::MeshComponents::Position, oglu::MeshComponents::Normal, oglu::MeshComponents::TextureUV>;
+     *  \endcode
+     *  \see MeshComponents
+     */
     template <typename ... Components>
     class Mesh
     {
@@ -192,17 +203,18 @@ namespace oglu
         Mesh();
         virtual ~Mesh();
 
-        /*! Assign component datas to a program's attribute. */
+        /*! Sets the attribute identifier for datas of type Component. */
         template <typename Component>
         void setAttribute(AttributeId attributeId);
 
-        /*! Assign mesh datas using a loader.
+        /*! Assigns mesh datas using a loader.
          *
          *  \tparam Loader This class must inherits from AMeshModelLoader.
          */
         template <typename Loader>
         void load(Loader&& loader);
 
+        /*! Draw the mesh. */
         void render(std::function<void(std::size_t)>&& mode = RenderModes::fill)const;
     private:
         template <typename Loader>
