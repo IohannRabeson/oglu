@@ -20,7 +20,7 @@
 
 namespace oglu
 {
-    template <typename C, typename T, T DefaultValue, T RootValue>
+    template <typename C, typename T>
     class RadixTreeBase
     {
         class Node;
@@ -32,9 +32,9 @@ namespace oglu
         using OStream = std::basic_ostream<C>;
 
         using StringIterator = typename String::const_iterator;
-        static void exportDotLabel(ConstNodePtr node, OStream& os);
+        void exportDotLabel(ConstNodePtr node, OStream& os)const;
     public:
-        static constexpr C	NullKey = C(0);
+        static constexpr C NullKey = C(0);
 
         RadixTreeBase();
         RadixTreeBase(std::initializer_list<std::pair<String, T>>&& init);
@@ -43,6 +43,7 @@ namespace oglu
         void exportDot(OStream& os, String const& graphName)const;
         void addWord(String const& word, T const& value);
         void completeWord(String const& beginStr, std::vector<String>& results)const;
+        bool get(String const& str, T& value)const;
         void getWords(std::vector<String>& results)const;
         bool tryGetValue(String const& word, T& value)const;
         std::pair<StringIterator, bool> tryGetValue(StringIterator begin, StringIterator end, T& value)const;
@@ -54,8 +55,8 @@ namespace oglu
         NodePtr	m_root;
     };
 
-    template <typename T, T DefaultValue, T RootValue>
-    using RadixTree = RadixTreeBase<char, T, DefaultValue, RootValue>;
+    template <typename T>
+    using RadixTree = RadixTreeBase<char, T>;
 }
 
 #include "RadixTree.hxx"

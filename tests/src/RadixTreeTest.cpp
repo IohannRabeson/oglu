@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_SUITE( lexical_tree )
 
 BOOST_AUTO_TEST_CASE( add_word_tests0 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0> tree;
+        oglu::RadixTreeBase<char, int> tree;
         std::vector<std::string> result;
         std::vector<std::string> expected
         {
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE( add_word_tests0 )
 
 BOOST_AUTO_TEST_CASE( add_word_tests1 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0> tree;
+        oglu::RadixTreeBase<char, int> tree;
         std::vector<std::string> result;
         std::vector<std::string> expected
         {
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE( add_word_tests1 )
 
 BOOST_AUTO_TEST_CASE( add_word_tests2 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
         std::vector<std::string> 			expected
         {
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE( add_word_tests2 )
 
 BOOST_AUTO_TEST_CASE( get_words_tests0 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
         std::vector<std::string> 			expected
         {
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE( get_words_tests0 )
 
 BOOST_AUTO_TEST_CASE( add_word_error )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
 
         BOOST_REQUIRE_NO_THROW( tree.addWord("a", 1) );
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE( add_word_error )
 
 BOOST_AUTO_TEST_CASE( get_words_tests1 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
         std::vector<std::string> 			expected
         {
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE( get_words_tests1 )
 
 BOOST_AUTO_TEST_CASE( get_words_tests2 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
         std::vector<std::string> 			expected
         {
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE( get_words_tests2 )
 
 BOOST_AUTO_TEST_CASE( get_words_tests3 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string>			result;
         std::vector<std::string> 			expected
         {
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE( get_words_tests3 )
 
 BOOST_AUTO_TEST_CASE( complete_words_tests )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -273,7 +273,7 @@ BOOST_AUTO_TEST_CASE( complete_words_tests )
 
 BOOST_AUTO_TEST_CASE( complete_words_tests2 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -337,7 +337,7 @@ BOOST_AUTO_TEST_CASE( complete_words_tests2 )
 
 BOOST_AUTO_TEST_CASE( complete_words_tests3 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -367,7 +367,7 @@ BOOST_AUTO_TEST_CASE( complete_words_tests3 )
 
 BOOST_AUTO_TEST_CASE( complete_words_tests4 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -402,7 +402,7 @@ BOOST_AUTO_TEST_CASE( complete_words_tests4 )
 
 BOOST_AUTO_TEST_CASE( complete_words_tests5 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -454,7 +454,7 @@ BOOST_AUTO_TEST_CASE( complete_words_tests5 )
 
 BOOST_AUTO_TEST_CASE( contains_word_tests0 )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",
@@ -482,7 +482,7 @@ BOOST_AUTO_TEST_CASE( contains_word_tests0 )
 
 BOOST_AUTO_TEST_CASE( not_contains_word_test )
 {
-        oglu::RadixTreeBase<char, int, -1, 0>	tree;
+        oglu::RadixTreeBase<char, int>	tree;
         std::vector<std::string> 			words
         {
                 "a",

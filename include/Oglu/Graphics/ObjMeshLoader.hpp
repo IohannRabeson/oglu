@@ -48,27 +48,33 @@ namespace oglu
 
             file.exceptions(std::ios_base::badbit);
             m_positions.reserve(256u);
+            m_textures.reserve(256u);
+            m_normals.reserve(256u);
             while (isOk && std::getline(file, line))
             {
-                if (line.empty())
-                    continue;
-                auto const keySize = line.find_first_of(" ");
-
-                if (keySize != std::string::npos)
+                if (line.empty() == false)
                 {
-                    auto const key = line.substr(0u, keySize);
-                    auto const loaderIt = m_loadingFunctions.find(key);
+                    auto const keySize = line.find_last_of(" ");
 
-                    if (loaderIt != m_loadingFunctions.end())
+                    if (keySize != std::string::npos)
                     {
-                        isOk &= loaderIt->second(line);
+                        auto const key = line.substr(0u, keySize);
+                        auto const loaderIt = m_loadingFunctions.find(key);
+
+                        if (loaderIt != m_loadingFunctions.end())
+                        {
+                            isOk &= loaderIt->second(line);
+                        }
+                        if (isOk == false)
+                        {
+                            std::ostringstream oss;
+
+                            oss << m_filePath << ": failed at line " << lineId << ": " << line << std::endl;
+                            throw std::runtime_error(oss.str());
+                        }
                     }
-                    if (isOk == false)
-                    {
-                        std::cout << "Failed at line " << lineId << ": " << line << std::endl;
-                    }
-                    ++lineId;
                 }
+                ++lineId;
             }
         }
 
@@ -215,6 +221,7 @@ namespace oglu
                     GLuint index = std::numeric_limits<GLuint>::max();
 
                     state = Parser::parse(std::move(state), index);
+                    // Index readed is 1-based, our stored vertices are 0-based indexed.
                     indexes.emplace_back(index - 1u);
                 }
             }

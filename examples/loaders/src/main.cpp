@@ -19,6 +19,7 @@
 #include <Oglu/Graphics/RgbaColor.hpp>
 #include <Oglu/Graphics/Transform.hpp>
 #include <Oglu/Graphics/ObjMeshLoader.hpp>
+#include <Oglu/Graphics/PlyMeshLoader.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -65,7 +66,7 @@ int main( void )
         {
             mesh.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
             mesh.setAttribute<oglu::MeshComponents::Normal>(program.getAttributeLocation("vertexNormal"));
-            mesh.load(oglu::ObjMeshLoader<Mesh>("models/susan_smooth.obj"));
+            mesh.load(oglu::PlyMeshLoader<Mesh>("models/susan_color.ply"));
         }
         for (auto i = 0u; i < transforms.size(); ++i)
         {

@@ -65,6 +65,7 @@ set(SRC
     ${INC_DIR}/Graphics/Mesh.hpp
     ${INC_DIR}/Graphics/Mesh.hxx
     ${INC_DIR}/Graphics/ObjMeshLoader.hpp
+    ${INC_DIR}/Graphics/PlyMeshLoader.hpp
     ${INC_DIR}/Graphics/Transform.hpp
 
     ${INC_DIR}/Window/ContextSettings.hpp

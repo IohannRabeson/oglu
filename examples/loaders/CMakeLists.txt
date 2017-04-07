@@ -14,6 +14,7 @@ set(MODEL_SRC
     ${MODELS_DIR}/susan.obj
     ${MODELS_DIR}/susan_smooth.obj
     ${MODELS_DIR}/cube.obj
+    ${MODELS_DIR}/susan_color.ply
 )
 
 set(SHADER_SRC
