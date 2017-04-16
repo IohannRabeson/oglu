@@ -198,14 +198,32 @@ namespace oglu
         static constexpr std::size_t const ComponentCount = sizeof ... (Components);
     private:
         template <typename Component>
-        class Storage;
+        class VertexBuffer;
     public:
         Mesh();
         virtual ~Mesh();
 
-        /*! Sets the attribute identifier for datas of type Component. */
         template <typename Component>
         void setAttribute(AttributeId attributeId);
+
+        /*! Assign component vertex buffer to a program shader attribute.
+         *
+         *  \code
+         *  #version 330 core
+         *
+         *  // Input vertex data, different for all executions of this shader.
+         *  layout(location = 0) in vec3	vertexPosition;
+         *  layout(location = 1) in vec3	vertexColor;
+         *
+         *  ...
+         *  \endcode
+         *  \code
+         *  mesh.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+         *  mesh.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
+         *  \endcode
+         */
+        template <typename Component>
+        void setAttribute(Program const& program, std::string const& name);
 
         /*! Assigns mesh datas using a loader.
          *
@@ -222,12 +240,12 @@ namespace oglu
         bool checkStoragesHaveSameVerticeCount()const;
 
         template <typename Component>
-        Storage<Component> const& getStorage()const;
+        VertexBuffer<Component> const& getStorage()const;
 
         template <typename Component>
-        Storage<Component>& getStorage();
+        VertexBuffer<Component>& getStorage();
     private:
-        std::tuple<Storage<Components>...> m_storages;
+        std::tuple<VertexBuffer<Components>...> m_storages;
         std::size_t m_verticeCount = 0u;
         GLuint m_vertexArray = 0u;
     };

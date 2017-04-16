@@ -14,7 +14,7 @@ namespace oglu
 
     template <typename ... Components>
     template <typename Component>
-    auto Mesh<Components...>::getStorage()const -> Storage<Component> const&
+    auto Mesh<Components...>::getStorage()const -> VertexBuffer<Component> const&
     {
         static constexpr std::size_t const ComponentIndex = IndexOf<Component, ComponentList>::value;
 
@@ -23,7 +23,7 @@ namespace oglu
 
     template <typename ... Components>
     template <typename Component>
-    auto Mesh<Components...>::getStorage() -> Storage<Component>&
+    auto Mesh<Components...>::getStorage() -> VertexBuffer<Component>&
     {
         static constexpr std::size_t const ComponentIndex = IndexOf<Component, ComponentList>::value;
 
@@ -37,6 +37,13 @@ namespace oglu
         static constexpr std::size_t const ComponentIndex = IndexOf<Component, ComponentList>::value;
 
         std::get<ComponentIndex>(m_storages).setAttribute(attributeId);
+    }
+
+    template <typename ... Components>
+    template <typename Component>
+    void Mesh<Components...>::setAttribute(Program const& program, std::string const& name)
+    {
+        setAttribute<Component>(program.getAttributeLocation(name));
     }
 
     template <typename ... Components>
@@ -126,15 +133,15 @@ namespace oglu
      */
     template <typename ... Components>
     template <typename Component>
-    class Mesh<Components...>::Storage
+    class Mesh<Components...>::VertexBuffer
     {
     public:
-        Storage()
+        VertexBuffer()
         {
             GL_CHECK( glGenBuffers(1, &m_buffer) );
         }
 
-        ~Storage()
+        ~VertexBuffer()
         {
             GL_CHECK( glDeleteBuffers(1, &m_buffer) );
         }

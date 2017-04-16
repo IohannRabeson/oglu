@@ -36,9 +36,7 @@ namespace oglu
         glm::vec3 const& getPosition()const;
         glm::quat const& getRotation()const;
         glm::vec3 const& getScale()const;
-
         glm::mat4 const& getMatrix()const;
-
     private:
         void updateCache()const;
     private:

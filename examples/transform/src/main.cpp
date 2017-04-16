@@ -153,8 +153,8 @@ int main( void )
 
         for (auto& mesh : meshes)
         {
-            mesh.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
-            mesh.setAttribute<oglu::MeshComponents::Color>(program.getAttributeLocation("vertexColor"));
+            mesh.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+            mesh.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
             mesh.load(CubeLoader());
         }
         for (auto i = 0u; i < transforms.size(); ++i)

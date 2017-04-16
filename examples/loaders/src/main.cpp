@@ -63,8 +63,8 @@ int main( void )
 
         for (auto& mesh : meshes)
         {
-            mesh.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
-            mesh.setAttribute<oglu::MeshComponents::Normal>(program.getAttributeLocation("vertexNormal"));
+            mesh.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+            mesh.setAttribute<oglu::MeshComponents::Normal>(program, "vertexNormal");
             mesh.load(oglu::ObjMeshLoader<Mesh>("models/susan_smooth.obj"));
         }
         for (auto i = 0u; i < transforms.size(); ++i)

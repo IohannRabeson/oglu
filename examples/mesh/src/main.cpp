@@ -150,12 +150,12 @@ int main( void )
 
         camera.setPosition(0.f, 0.f, 5.f);
 
-        mesh.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh.setAttribute<oglu::MeshComponents::Color>(program.getAttributeLocation("vertexColor"));
+        mesh.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+        mesh.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
         mesh.load(CubeLoader());
 
-        mesh2.setAttribute<oglu::MeshComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh2.setAttribute<oglu::MeshComponents::Color>(program.getAttributeLocation("vertexColor"));
+        mesh2.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+        mesh2.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
         mesh2.load(CubeLoader());
 
         render.setCursorPosition(glm::dvec2(0, 0));
