@@ -72,8 +72,8 @@ namespace oglu
     /*!
      *  \brief Concatenate serveral types lists
      *  \code
-     *  using MyTypeList0 = oglu::TypeList<int, float, bool>;
-     *  using MyTypeList1 = oglu::TypeList<int, std::string>;
+     *  using MyTypeList0 = bns::TypeList<int, float, bool>;
+     *  using MyTypeList1 = bns::TypeList<int, std::string>;
      *
      *  using Result = Concat<MyTypeList0, MyTypeList1>;
      *  \endcode
@@ -88,10 +88,10 @@ namespace oglu
 
     // Here TS must be not defined by the user since
     // the compiler can deduce it. When we specialize RenameHelper
-    // we pass for the type T T0<TS...>, this is here compiler deduce
+    // we pass for the type T TO<TS...>, this is here compiler deduce
     // TS.
-    template <template <class...> class TN, template <class...> class T0, class ... TS>
-    struct RenameHelper<TN, T0<TS...>>
+    template <template <class...> class TN, template <class...> class TO, class ... TS>
+    struct RenameHelper<TN, TO<TS...>>
     {
         using Type = TN<TS...>;
     };
@@ -100,8 +100,8 @@ namespace oglu
      *  \brief Rename a type list
      *
      *  \code
-     *  using MyTypeList = oglu::TypeList<int, float, bool>;
-     *  using MyTuple = oglu::Rename<std::tuple, MyTypeList>
+     *  using MyTypeList = bns::TypeList<int, float, bool>;
+     *  using MyTuple = bns::Rename<std::tuple, MyTypeList>
      *  \endcode
      */
     template <template <class...> class TN, class T>
@@ -156,8 +156,8 @@ namespace oglu
     {
     };
 
-    template <class T, class T0, class ... TS>
-    struct IndexOf<T, TypeList<T0, TS...>> : public SizeTypeConstant<IndexOf<T, TypeList<TS...>>::value + 1u>
+    template <class T, class TO, class ... TS>
+    struct IndexOf<T, TypeList<TO, TS...>> : public SizeTypeConstant<IndexOf<T, TypeList<TS...>>::value + 1u>
     {
     };
 
@@ -168,26 +168,25 @@ namespace oglu
     {
     };
 
-    template <class T, class T0, class ... TS>
-    struct CountHelper<T, TypeList<T0, TS...>> : public SizeTypeConstant
+    template <class T, class TO, class ... TS>
+    struct CountHelper<T, TypeList<TO, TS...>> : public SizeTypeConstant
             <
-                CountHelper<T, TypeList<TS...>>::value + (std::is_same<T, T0>::value ? 1u : 0u)
+                CountHelper<T, TypeList<TS...>>::value + (std::is_same<T, TO>::value ? 1u : 0u)
             >
     {
     };
 
-    /*!
-     *  \brief Get the count of a particular type in a type list.
-     */
     template <class T, class TS>
     using Count = typename CountHelper<T, TS>::type;
-
-    template <class>
-    struct Length;
 
     /*!
      *  \brief Get the length of a type list.
      */
+    template <class TS>
+    struct Length : public SizeTypeConstant<0u>
+    {
+    };
+
     template <class ... TS>
     struct Length<TypeList<TS...>> : public SizeTypeConstant<sizeof ... (TS)>
     {
@@ -236,25 +235,25 @@ namespace oglu
     };
 
     /*!
-     *  \brief Generate successive call for each types in type list TS
+     *  \brief Generate successive a call for each types in type list TS
      *  \tparam TS Type list
      *  \tparam L Lambda type
      *
-     *  The current type is passed to the lamda by a parameter of type oglu::Type<T>
+     *  The current type is passed to the lamda by a parameter of type bns::Type<T>
      *  with T the current type in TS.
      *  The lambda used must take one parameter of type auto which will be used
      *  to get the type:
      *  \code
      *
-     *  using MyTypeList = oglu::TypeList<int, std::string, int, long, bool>;
+     *  using MyTypeList = bns::TypeList<int, std::string, int, long, bool>;
      *
-     *  oglu::forEach<MyTypeList>([this](auto t)
+     *  bns::forEach<MyTypeList>([this](auto t)
      *  {
-     *      // This lambda will be called 5 times, with a t of type oglu::Type<int>, oglu::Type<std::string>, etc...
+     *      // This lambda will be called 5 times, with a t of type bns::Type<int>, bns::Type<std::string>, etc...
      *      using TType = decltype(t);
      *      using CurrentType = typename TType::TType;
      *
-     *      // Do something with CurrentType...
+     *      // Do something with CurrentTYpe...
      *  });
      *
      *  \endcode
@@ -310,6 +309,15 @@ namespace oglu
         using Type = typename std::conditional<P<T>::value, Concat<TypeList<T>, Next>, Next>::type;
     };
 
+    /*!
+     *  \brief Remove type in a typelist using a predicate.
+     *
+     *  \code
+     *  using Numbers = bns::TypeList<int, double, float, unsigned>;
+     *  using Integers = bns::Filter<std::is_integral, Numbers>;
+     *  // Integers -> <int, unsigned>
+     *  \endcode
+     */
     template <template <class> class P, class TS>
     using Filter = typename FilterHelper<P, TS>::Type;
 }

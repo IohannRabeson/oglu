@@ -22,6 +22,8 @@ set(SRC_TEST
     ${SRC_DIR}/ProgramTest.cpp
     ${SRC_DIR}/TypeListTest.cpp
     ${SRC_DIR}/MeshModelTest.cpp
+    ${SRC_DIR}/StringConverterTest.cpp
+    ${SRC_DIR}/RadixTreeTest.cpp
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/tests)
@@ -33,12 +35,12 @@ foreach(SRC_FILE ${SRC_TEST})
         get_filename_component(TEST_NAME ${SRC_FILE} NAME_WE)
 
         add_executable(${TEST_NAME} ${SRC_FILE} ${SRC_TESTED} ${SRC})
-                set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 11)
+                set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 14)
                 set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
         #link to Boost libraries and other targets and dependencies
         target_link_libraries(${TEST_NAME} ${Boost_LIBRARIES})
-                target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
+                target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_STATIC_LIBRARY} oglu)
 
                 #Finally add it to test execution -
         #Notice the WORKING_DIRECTORY and COMMAND

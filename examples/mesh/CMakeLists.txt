@@ -6,7 +6,7 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(SHD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/shaders)
 
 set(SRC
-        ${SRC_DIR}/main.cpp
+    ${SRC_DIR}/main.cpp
 )
 
 set(SHADER_SRC
@@ -18,12 +18,12 @@ include_directories(${INC_DIR})
 
 set(EXECUTABLE_OUTPUT_PATH ${APPLICATION_OUTPUT_DIR}/examples)
 add_definitions(-Wall -Werror -Wextra)
-add_executable(${APPLICATION_NAME} ${SRC})
+add_executable(${APPLICATION_NAME} ${SRC} ${SHADER_SRC})
 
 set_property(TARGET ${APPLICATION_NAME} PROPERTY CXX_STANDARD 11)
 set_property(TARGET ${APPLICATION_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 
-target_link_libraries(${APPLICATION_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
+target_link_libraries(${APPLICATION_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_STATIC_LIBRARIES} oglu)
 
 if (XCODE OR MSVC)
     set(DESTINATION_SHADER ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/shaders)

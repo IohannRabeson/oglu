@@ -28,7 +28,7 @@ namespace oglu
         ~Shader();
 
         /*!
-         * \brief Load then compile the shader
+         * \brief Loads then compiles the shader.
          * \exception ShaderCompilationException If compilation fails
          */
         void load(AShaderLoader&& loader);

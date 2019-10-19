@@ -35,6 +35,12 @@ void oglu::Transform::setRotation(const glm::quat &rotation)
     m_updateCache = true;
 }
 
+void oglu::Transform::setRotation(float degres, const glm::vec3 &axis)
+{
+    m_rotation = glm::rotate(glm::quat(), degres, axis);
+    m_updateCache = true;
+}
+
 void oglu::Transform::rotate(float degres, const glm::vec3 &axis)
 {
     m_rotation = glm::rotate(m_rotation, degres, axis);
@@ -72,7 +78,6 @@ void oglu::Transform::updateCache() const
 {
     if (m_updateCache == false)
         return;
-    //m_matrix = glm::scale(IdentityMatrix, m_scale);
-    m_matrix = glm::translate(IdentityMatrix, m_position) * glm::toMat4(m_rotation) * glm::scale(IdentityMatrix, m_scale);
+    m_matrix = glm::scale(IdentityMatrix, m_scale) * glm::toMat4(m_rotation) * glm::translate(IdentityMatrix, m_position);
     m_updateCache = false;
 }

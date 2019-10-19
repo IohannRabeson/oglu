@@ -24,9 +24,9 @@
 
 #include <glm/ext.hpp>
 
-using Mesh = oglu::Mesh<oglu::ModelComponents::Position, oglu::ModelComponents::Color>;
+using Mesh = oglu::Mesh<oglu::MeshComponents::Position, oglu::MeshComponents::Color>;
 
-class CubeLoader : public Mesh::AMeshModelLoader
+class CubeLoader : public oglu::AMeshLoader<Mesh>
 {
     std::vector<glm::vec3> const PositionBufferData =
     {
@@ -108,12 +108,12 @@ class CubeLoader : public Mesh::AMeshModelLoader
         {0.982f,  0.099f,  0.879f}
     };
 
-    void load(std::vector<oglu::ModelComponents::Position::DataType>& positions) override
+    void load(oglu::MeshComponents::Position, std::vector<oglu::MeshComponents::Position::DataType>& positions) override
     {
         positions.assign(std::begin(PositionBufferData), std::end(PositionBufferData));
     }
 
-    void load(std::vector<oglu::ModelComponents::Color::DataType>& colors) override
+    void load(oglu::MeshComponents::Color, std::vector<oglu::MeshComponents::Color::DataType>& colors) override
     {
         colors = ColorBufferData;
     }
@@ -150,12 +150,12 @@ int main( void )
 
         camera.setPosition(0.f, 0.f, 5.f);
 
-        mesh.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
+        mesh.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+        mesh.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
         mesh.load(CubeLoader());
 
-        mesh2.setAttribute<oglu::ModelComponents::Position>(program.getAttributeLocation("vertexPosition"));
-        mesh2.setAttribute<oglu::ModelComponents::Color>(program.getAttributeLocation("vertexColor"));
+        mesh2.setAttribute<oglu::MeshComponents::Position>(program, "vertexPosition");
+        mesh2.setAttribute<oglu::MeshComponents::Color>(program, "vertexColor");
         mesh2.load(CubeLoader());
 
         render.setCursorPosition(glm::dvec2(0, 0));
@@ -169,9 +169,9 @@ int main( void )
             render.pollEvents();
             render.clear();
             program.use();
-            program.setUniform(uniformCamera, camera.getMatrix() * model);
+            program.setUniform(uniformCamera, camera.getViewProjectionMatrix() * model);
             mesh.render();
-            program.setUniform(uniformCamera, camera.getMatrix());
+            program.setUniform(uniformCamera, camera.getViewProjectionMatrix());
             mesh2.render();
             program.unuse();
             render.display();

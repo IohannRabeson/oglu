@@ -72,7 +72,11 @@ BOOST_AUTO_TEST_CASE( trivial )
         return;
     }
 
-    oglu::Mesh<oglu::ModelComponents::Position, oglu::ModelComponents::Color> model;
+    oglu::Mesh<oglu::MeshComponents::Position,
+               oglu::MeshComponents::Color,
+               oglu::MeshComponents::Index,
+               oglu::MeshComponents::Normal,
+               oglu::MeshComponents::TextureUV> model;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

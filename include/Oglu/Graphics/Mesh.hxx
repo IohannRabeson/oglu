@@ -14,7 +14,7 @@ namespace oglu
 
     template <typename ... Components>
     template <typename Component>
-    auto Mesh<Components...>::getStorage()const -> Storage<Component> const&
+    auto Mesh<Components...>::getStorage()const -> VertexBuffer<Component> const&
     {
         static constexpr std::size_t const ComponentIndex = IndexOf<Component, ComponentList>::value;
 
@@ -23,7 +23,7 @@ namespace oglu
 
     template <typename ... Components>
     template <typename Component>
-    auto Mesh<Components...>::getStorage() -> Storage<Component>&
+    auto Mesh<Components...>::getStorage() -> VertexBuffer<Component>&
     {
         static constexpr std::size_t const ComponentIndex = IndexOf<Component, ComponentList>::value;
 
@@ -40,33 +40,40 @@ namespace oglu
     }
 
     template <typename ... Components>
-    template <typename Loader>
-    void Mesh<Components...>::load(Loader&& loader)
+    template <typename Component>
+    void Mesh<Components...>::setAttribute(Program const& program, std::string const& name)
     {
-        loadImp(std::forward<AMeshModelLoader>(loader));
+        setAttribute<Component>(program.getAttributeLocation(name));
     }
 
     template <typename ... Components>
-    void Mesh<Components...>::render()const
+    template <typename Loader>
+    void Mesh<Components...>::load(Loader&& loader)
     {
-        glBindVertexArray(m_vertexArray);
+        loadImp(std::forward<Loader>(loader));
+    }
+
+    template <typename ... Components>
+    void Mesh<Components...>::render(std::function<void(std::size_t)>&& mode)const
+    {
+        GL_CHECK( glBindVertexArray(m_vertexArray) );
 
         // Call enableVertexAttribute() for each storage in m_storages
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             storage.enableVertexAttribute();
         });
 
-        glDrawArrays(GL_TRIANGLES, 0, m_verticeCount);
+        mode(m_verticeCount);
 
         // Call disableVertexAttribute() for each storage in m_storages
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             storage.disableVertexAttribute();
         });
@@ -82,7 +89,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this, &result](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             result &= (storage.size() == m_verticeCount);
         });
@@ -96,22 +103,24 @@ namespace oglu
     {
         glBindVertexArray(m_vertexArray);
 
+        loader.beginLoading();
         oglu::forEach<ComponentList>([this, &loader](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto& storage = this->getStorage<ComponentType>();
 
-            storage.load(loader);
+            storage.load(ComponentType{}, loader);
         });
+        loader.endLoading();
 
-        m_verticeCount = getStorage<ModelComponents::Position>().size();
+        m_verticeCount = getStorage<MeshComponents::Position>().size();
 
         assert( checkStoragesHaveSameVerticeCount() );
 
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto& storage = this->getStorage<ComponentType>();
 
             storage.prepareRender();
         });
@@ -120,19 +129,19 @@ namespace oglu
     }
 
     /*!
-     *  Handle a Vertex Buffer dedicated to a particular Component.
+     *  \brief Handle a Vertex Buffer dedicated to a particular Component.
      */
     template <typename ... Components>
     template <typename Component>
-    class Mesh<Components...>::Storage
+    class Mesh<Components...>::VertexBuffer
     {
     public:
-        Storage()
+        VertexBuffer()
         {
             GL_CHECK( glGenBuffers(1, &m_buffer) );
         }
 
-        ~Storage()
+        ~VertexBuffer()
         {
             GL_CHECK( glDeleteBuffers(1, &m_buffer) );
         }
@@ -147,10 +156,10 @@ namespace oglu
             m_attribute = attributeId;
         }
 
-        std::size_t load(AMeshModelComponentLoader<Component>& loader)
+        std::size_t load(Component, AMeshComponentLoader<Component>& loader)
         {
             using DataType = typename Component::DataType;
-            loader.template load(m_components);
+            loader.load(Component{}, m_components);
 
             GL_CHECK( glBindBuffer(oglu::lazyCast(Component::Target), m_buffer) );
             GL_CHECK( glBufferData(oglu::lazyCast(Component::Target), sizeof(DataType) * m_components.size(), m_components.data(), GL_STATIC_DRAW) );
