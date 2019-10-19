@@ -40,7 +40,7 @@ foreach(SRC_FILE ${SRC_TEST})
 
         #link to Boost libraries and other targets and dependencies
         target_link_libraries(${TEST_NAME} ${Boost_LIBRARIES})
-                target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} oglu)
+                target_link_libraries(${TEST_NAME} ${OPENGL_gl_LIBRARY} glfw ${GLFW_LIBRARIES} ${GLEW_STATIC_LIBRARY} oglu)
 
                 #Finally add it to test execution -
         #Notice the WORKING_DIRECTORY and COMMAND

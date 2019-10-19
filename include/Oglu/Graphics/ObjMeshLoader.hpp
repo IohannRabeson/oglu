@@ -72,7 +72,7 @@ namespace oglu
             }
         }
 
-        void load(oglu::MeshComponents::Position, std::vector<oglu::MeshComponents::Position::DataType>& positions)
+        void load(oglu::MeshComponents::Position, std::vector<oglu::MeshComponents::Position::DataType>& positions) override
         {
             for (auto const index : m_positionIndexes)
             {
@@ -83,7 +83,7 @@ namespace oglu
             }
         }
 
-        void load(oglu::MeshComponents::Normal, std::vector<oglu::MeshComponents::Normal::DataType>& normals)
+        void load(oglu::MeshComponents::Normal, std::vector<oglu::MeshComponents::Normal::DataType>& normals) override
         {
             for (auto const index : m_normalIndexes)
             {

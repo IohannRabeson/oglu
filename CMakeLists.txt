@@ -126,7 +126,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_variadic_templates)
 target_link_libraries(${APPLICATION_NAME}
                       ${OPENGL_gl_LIBRARIES}
                       ${GLFW_LIBRARIES}
-                      ${GLEW_LIBRARIES}
+                      ${GLEW_STATIC_LIBRARY}
                       glfw)
 
 if (BUILD_ALL OR BUILD_DOCUMENTATION)
