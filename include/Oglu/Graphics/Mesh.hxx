@@ -62,7 +62,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             storage.enableVertexAttribute();
         });
@@ -73,7 +73,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             storage.disableVertexAttribute();
         });
@@ -89,7 +89,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this, &result](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto const& storage = getStorage<ComponentType>();
+            auto const& storage = this->getStorage<ComponentType>();
 
             result &= (storage.size() == m_verticeCount);
         });
@@ -107,7 +107,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this, &loader](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto& storage = this->getStorage<ComponentType>();
 
             storage.load(ComponentType{}, loader);
         });
@@ -120,7 +120,7 @@ namespace oglu
         oglu::forEach<ComponentList>([this](auto t)
         {
             using ComponentType = typename decltype(t)::TType;
-            auto& storage = getStorage<ComponentType>();
+            auto& storage = this->getStorage<ComponentType>();
 
             storage.prepareRender();
         });
@@ -159,7 +159,7 @@ namespace oglu
         std::size_t load(Component, AMeshComponentLoader<Component>& loader)
         {
             using DataType = typename Component::DataType;
-            loader.template load(Component{}, m_components);
+            loader.load(Component{}, m_components);
 
             GL_CHECK( glBindBuffer(oglu::lazyCast(Component::Target), m_buffer) );
             GL_CHECK( glBufferData(oglu::lazyCast(Component::Target), sizeof(DataType) * m_components.size(), m_components.data(), GL_STATIC_DRAW) );

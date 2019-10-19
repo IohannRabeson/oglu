@@ -205,6 +205,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( float_error_tests, T, AtoiTestTypes )
 
 BOOST_AUTO_TEST_CASE( bool_test )
 {
+//    TODO: Boolean parser (using the radix tree)
 //    BOOST_TEST( oglu::Parser::parse<bool>("true") == true );
 //    BOOST_TEST( oglu::Parser::parse<bool>("false") == false );
 //    BOOST_CHECK_THROW( oglu::Parser::parse<bool>(""), FormatException );

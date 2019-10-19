@@ -122,6 +122,4 @@ namespace oglu
         }
         return result;
     }
-
-
 }
