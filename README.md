@@ -1,5 +1,7 @@
 # Oglu library 
- - version: 0.0.0
+An aborted attempt to make wrapper around OpenGL reducing the boilerplate, and hiding the ugly stuff behind a type safe API.
+I did that because I wanted to use OpenGL, and I had a lot of metaprogramming thing in head at the same time.
+I only tried it on Mac with everything installed using Brew.
 
 # Requierements
  - a C++ compiler with a good C++11 support
