@@ -1,5 +1,5 @@
 # Oglu library 
-An aborted attempt to make wrapper around OpenGL reducing the boilerplate, and hiding the ugly stuff behind a type safe API.
+An aborted attempt to make a wrapper around OpenGL reducing the boilerplate, and hiding the ugly stuff behind a type safe API.
 I did that because I wanted to use OpenGL, and I had a lot of metaprogramming thing in head at the same time.
 I only tried it on Mac with everything installed using Brew.
 
